@@ -31,7 +31,7 @@ st.title("Matriz SEO")
 
 st.write("Adjuntar archivo con las urls")
 
-uploaded_file = st.file_uploader(label= "")
+uploaded_file = st.file_uploader(label= "Elegir archivo",label_visibility= 'hidden')
 
 
     
