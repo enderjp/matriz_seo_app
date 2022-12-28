@@ -140,6 +140,22 @@ def get_description(soup, keyword):
             have_kw =  "NO"
         return len_description, have_kw
     
+    elif soup.findAll("meta", attrs={"property": "og:description"}):
+        description = soup.find("meta", attrs={"property": "og:description"}).get("content")
+        description = quitar_acentos(description)
+        keyword = quitar_acentos(keyword)
+        
+        if len(description) >= 156:
+            len_description= "NO"
+        else:
+            len_description = "SI"
+       
+        if keyword.lower() in description.lower():
+            have_kw =  "SI"
+        else:
+            have_kw =  "NO"
+        return len_description, have_kw
+    
     else:
         return "NOT FOUND", "NULO"
 
