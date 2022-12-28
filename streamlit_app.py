@@ -98,7 +98,42 @@ if uploaded_file:
                 page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'})
             except:
                 page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'},verify=False)
-        
+            
+            
+            # añadir validación si la página está disponible
+            
+            if "404"  in str(page):
+                
+                matriz_seo.loc[i] = ["ERROR 404" ,  
+                                     ' ',
+                                    ' ',
+                                    "ERROR 404" ,
+                                   "ERROR 404" ,
+                                    "ERROR 404" ,
+                                    "ERROR 404" ,
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    ' ',
+                                    ' ',
+                                    ' ',
+                                    "ERROR 404",
+                                    "ERROR 404",
+                                    "ERROR 404"
+                                 ]
+                
+                continue
+            
+            
+            #####################################################
+            
             soup = BeautifulSoup(page.content, 'html.parser')
             keyword = file.loc[i][1].strip()
             len_title_seo, have_kw_title_seo = inf_seo.get_title_seo(soup, keyword)
