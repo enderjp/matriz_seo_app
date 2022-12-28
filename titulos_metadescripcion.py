@@ -55,6 +55,7 @@ def get_title_seo(soup,keyword):
     Returns: 
         value (string): Parsed value
     """
+    keyword = quitar_acentos(keyword)
 
     if soup.findAll("title"):
         title_seo = soup.find("title").get_text().strip()
