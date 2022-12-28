@@ -90,6 +90,7 @@ def get_title_h1(soup,keyword):
     if soup.findAll("h1"):
         title_h1 = soup.find("h1").get_text().strip()
         title_h1 = quitar_acentos(title_h1)
+        print(title_h1)
         # chequear si contiene el keyword al inicio
         if title_h1.lower().startswith(keyword.lower()):
             starts_with_kw = "SI"
@@ -126,6 +127,7 @@ def get_description(soup, keyword):
     if soup.findAll("meta", attrs={"name": "description"}):
         description = soup.find("meta", attrs={"name": "description"}).get("content")
         description = quitar_acentos(description)
+        keyword = quitar_acentos(keyword)
         
         if len(description) >= 156:
             len_description= "NO"
