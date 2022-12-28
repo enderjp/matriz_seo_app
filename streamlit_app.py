@@ -129,6 +129,9 @@ if uploaded_file:
                                     "ERROR 404"
                                  ]
                 
+                # se añade un null a la lista de comparación de titulos 
+                # para mantener la misma longitud
+                titles_h1_seo_same.append("NULL")
                 continue
             
             
