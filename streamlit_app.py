@@ -110,7 +110,7 @@ if uploaded_file:
                                     "ERROR 404" ,
                                    "ERROR 404" ,
                                     "ERROR 404" ,
-                                    "ERROR 404" ,
+                                    file.loc[i][0] ,
                                     "ERROR 404",
                                     "ERROR 404",
                                     "ERROR 404",
