@@ -7,6 +7,7 @@ Created on Thu Oct 27 17:50:41 2022
 #from dateutil.parser import parse
 import dateutil.parser as dparser
 import unicodedata
+import re
 #from quitar_tildes import quitar_tildes
 
 
@@ -48,10 +49,17 @@ def contiene_fecha(url):
        # if  url_split[i].isalnum(): # ignorar las cadenas tipo 0406, XXXXXX, etc
             
     try: 
+        
         dparser.parse(url, fuzzy=True)
+        # si el número de numeros es menor a 4, no lo toma como una fecha
+        countNumbers = lambda x: len(re.findall("[0-9]", str(url)));
        
+        if countNumbers > 3: 
+            
                 #return True
-        cont+=1
+                cont+=1
+        else:
+            pass
        # print(cont)
     except:  #(ValueError, OverflowError):
           pass

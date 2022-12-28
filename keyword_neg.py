@@ -84,7 +84,50 @@ def keyword_sub(soup,keyword):
         else:
             return "NO"
         
+       # se considera la kw dentro de etiquetas p, strong y b
+    elif soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True):
+      
+           keyword = quitar_acentos(keyword)
+           
        
+      
+           # Todas las keyword dentro de una etiqueta 
+           
+           num_kw =  soup.find_all(["p","strong","b"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True)
+           
+           
+           # todas las keyword en general (solo la keyword)
+           # num_kw = soup.find_all(string=[keyword,keyword.lower(),
+           #                                keyword.capitalize(),
+           #                                keyword + " ",
+           #                                " " + keyword])
+           
+           kw_strong = soup.find_all(["strong"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True)
+
+           
+           
+           # kw_bold = soup.find_all("span",attrs={"style": "display: initial; font-weight: bold;"},
+           #                 string=[keyword,keyword.lower(),
+           #                         keyword.capitalize(),
+           #                         keyword + " ", " " + keyword])
+           
+           kw_bold = soup.find_all(["span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True)
+
+       
+           
+           kw_b = soup.find_all(["b"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True)
+
+           # no considerar acentos en los artículos
+           
+           
+
+
+
+           #print(num_kw,"  ", kw_strong)
+           if    len(num_kw) - len(kw_strong) <= 1 or len(num_kw) - len(kw_bold) <= 1  or len(num_kw) - len(kw_b) <= 1:
+               return "SI"
+           else:
+               return "NO"
         
     else:
         return " "

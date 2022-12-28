@@ -139,7 +139,10 @@ if uploaded_file:
             
             soup = BeautifulSoup(page.content, 'html.parser')
             keyword = file.loc[i][1].strip()
+            
+            # si en el archivo de keywords al final hay un punto, eliminarlo
             if keyword[-1] == ".":
+                
                 keyword = keyword.rstrip(keyword[-1])
             len_title_seo, have_kw_title_seo = inf_seo.get_title_seo(soup, keyword)
             len_description, have_kw_meta = inf_seo.get_description(soup, keyword)
