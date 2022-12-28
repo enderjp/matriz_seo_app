@@ -6,8 +6,8 @@ Created on Thu Oct 27 17:50:41 2022
 """
 #from dateutil.parser import parse
 import dateutil.parser as dparser
-
-from quitar_tildes import quitar_tildes
+import unicodedata
+#from quitar_tildes import quitar_tildes
 
 
 def url_tam(url, keyword):
@@ -19,6 +19,17 @@ def url_tam(url, keyword):
         url_tam = "NO"
         
     return url_tam
+
+
+
+# funcion para quitar acentos de una frase/párrafo
+def quitar_acentos(string):
+    
+
+    trans_tab = dict.fromkeys(map(ord, u'\u0301\u0308'), None)
+    resultado = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', string).translate(trans_tab))
+
+    return resultado
 
 
 def contiene_fecha(url):
@@ -60,14 +71,11 @@ def tiene_kw(url,keyword):
     
     keyword = keyword.replace(" ", "-") # Si tiene más de una palabra, llevamos el 
                                         # keyword al formato que tiene en las urls
-    keyword = quitar_tildes(keyword) # Quitar acentos
+    keyword = keyword.replace("ñ", "n")  
+    keyword = quitar_acentos(keyword) # Quitar acentos
     
     if keyword.lower() in url.lower():
         return "SI"
     else: 
         return "NO"
     
-    
-dparser.parse("Alimentos SAS • Jan 19, 2022", fuzzy=True)
-    
-

@@ -14,6 +14,20 @@ Extraer títulos y metadescripción
 # from bs4 import BeautifulSoup
 from quitar_tildes import quitar_tildes
 
+import unicodedata
+
+
+# funcion para quitar acentos de una frase/párrafo
+
+
+def quitar_acentos(string):
+    
+
+    trans_tab = dict.fromkeys(map(ord, u'\u0301\u0308'), None)
+    resultado = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', string).translate(trans_tab))
+
+    return resultado
+
 def title_seo_h1_diferentes(soup):
     
     if  soup.find("title") and  soup.find("h1") :
@@ -44,6 +58,7 @@ def get_title_seo(soup,keyword):
 
     if soup.findAll("title"):
         title_seo = soup.find("title").get_text().strip()
+        title_seo = quitar_acentos(title_seo)
         # Chequear longitud
         if len(title_seo) > 70:
             len_title_seo = "No"
@@ -74,7 +89,7 @@ def get_title_h1(soup,keyword):
 
     if soup.findAll("h1"):
         title_h1 = soup.find("h1").get_text().strip()
-        
+        title_h1 = quitar_acentos(title_h1)
         # chequear si contiene el keyword al inicio
         if title_h1.lower().startswith(keyword.lower()):
             starts_with_kw = "SI"
@@ -110,6 +125,7 @@ def get_description(soup, keyword):
     """
     if soup.findAll("meta", attrs={"name": "description"}):
         description = soup.find("meta", attrs={"name": "description"}).get("content")
+        description = quitar_acentos(description)
         
         if len(description) >= 156:
             len_description= "NO"
