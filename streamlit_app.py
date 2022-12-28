@@ -95,9 +95,9 @@ if uploaded_file:
             
             # usar un try y except para manejar el error de SSL certificate
             try: 
-                page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0'})
+                page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0'})
             except:
-                page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0'},verify=False)
+                page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0'},verify=False)
         
             soup = BeautifulSoup(page.content, 'html.parser')
             keyword = file.loc[i][1].strip()
