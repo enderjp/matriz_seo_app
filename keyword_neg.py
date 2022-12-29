@@ -84,7 +84,7 @@ def keyword_sub(soup,keyword):
         else:
             return "NO"
         
-       # se considera la kw dentro de etiquetas p, strong y b
+       # se considera la kw dentro de etiquetas p, strong y b pero esta vez con la kw sin acentos (si los hay)
     elif soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True):
       
            keyword = quitar_acentos(keyword)
