@@ -102,9 +102,11 @@ if uploaded_file:
             
             keyword = file.loc[i][1]
             
-            # validación para ignorar todo caracter que no sea una letra en la keyword
+            # validación para ignorar todo caracter que no sea una letra o un número en la keyword
             
-            keyword = re.sub(r'[^A-Za-zÀ-ÖØ-öø-ÿ ]', '', keyword)
+            keyword = re.sub(r'[^A-Za-zÀ-ÖØ-öø-ÿ-Z0-9 ]', '', keyword)
+            if keyword[-1] == "-":
+                keyword = keyword.rstrip(keyword[-1])
             keyword = keyword.strip()
             # añadir validación si la página está disponible
             
