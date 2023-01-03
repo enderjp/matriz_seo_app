@@ -104,7 +104,7 @@ if uploaded_file:
             
             # validación para ignorar todo caracter que no sea una letra en la keyword
             
-            keyword = re.sub(r'[^a-zA-Z ]', '', keyword)
+            keyword = re.sub(r'[^A-Za-zÀ-ÖØ-öø-ÿ ]', '', keyword)
             keyword = keyword.strip()
             # añadir validación si la página está disponible
             
