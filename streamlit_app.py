@@ -19,6 +19,7 @@ import keyword_primer_parrafo as kw_primer_p
 import url_tam_fecha as url
 import obtener_fecha_publicacion as fecha_public
 from titulos_metadescripcion import title_seo_h1_diferentes
+import re
 #from titulos_metadescripcion import *
 try:
     import StringIO 
@@ -100,6 +101,11 @@ if uploaded_file:
                 page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'},verify=False)
             
             keyword = file.loc[i][1].strip()
+            
+            # validación para ignorar todo caracter que no sea una letra en la keyword
+            
+            keyword = re.sub(r'[^a-zA-Z]', '', keyword)
+                        
             # añadir validación si la página está disponible
             
             if "404"  in str(page):
@@ -165,7 +171,7 @@ if uploaded_file:
                                 have_kw_meta,
                                 starts_with_kw,
                                 len_title_h1,
-                                'SI',
+                                'NO',
                                 keyword_neg.keyword_sub(soup, keyword),
                                 kw_primer_p.kw_prim_p(soup, keyword),
                                 'SI',

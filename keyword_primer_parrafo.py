@@ -17,11 +17,6 @@ def quitar_acentos(string):
 
     return resultado
 
-
-
-
-
-
 def kw_prim_p(soup,keyword):
     """
     ""
