@@ -74,7 +74,8 @@ for i in range(len(file)):
     #se añade a la lista un SI o NO, dependiendo si el titulo H1 Y seo son iguales
     titles_h1_seo_same.append(title_seo_h1_diferentes(soup))
    
-    
+    # añadida funcionalidad en funcion primer_parrafo
+    kw_subr, kw_primer_parrafo = kw_primer_p.kw_prim_p(soup, keyword)
     matriz_seo.loc[i] = [title_h1 ,  
                          ' ',
                         ' ',
@@ -89,8 +90,8 @@ for i in range(len(file)):
                         starts_with_kw,
                         len_title_h1,
                         'SI',
-                        keyword_neg.keyword_sub(soup, keyword),
-                        kw_primer_p.kw_prim_p(soup, keyword),
+                        kw_subr,
+                        kw_primer_parrafo,
                         'SI',
                         ' ',
                         ' ',

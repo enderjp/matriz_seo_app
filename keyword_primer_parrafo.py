@@ -7,7 +7,7 @@ Created on Thu Oct 27 17:41:08 2022
 from quitar_tildes import quitar_tildes
 import dateutil.parser as dparser
 import unicodedata
-
+import re 
 # funcion para quitar acentos de una frase/párrafo
 def quitar_acentos(string):
     
@@ -26,6 +26,8 @@ def kw_prim_p(soup,keyword):
     Nota: Cuidado con las páginas que usan la etiqueta "p" para 
     texto que no es párrafo. Para esto se toman en cuenta textos que no sean
     excesivamente cortos
+    
+    return (el keyword está subrayado en el 1er párrafo?) , (el keyword aparece en el 1er párrafo)
 
     """
     
@@ -83,21 +85,27 @@ def kw_prim_p(soup,keyword):
                     if  dparser.parse(parrafo_sin_acentos[cont], fuzzy=True) and len(parrafo_sin_acentos[cont] < 50): # si hay una fecha
                        
                         if ( keyword.lower() in parrafo_sin_acentos[cont].lower()) or (keyword_2.lower() in parrafo_sin_acentos[cont].lower() ): 
-                                 return "SI" 
+                               
+                           if (  soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
+                                          return "SI", "SI"
+                           return "NO", "SI" 
                     
                         else: 
-                                return "NO"
+                                return "NO", "NO"
                     
             # de no ser así y arroja error al verificar fecha, analizar igual si la keyword está alli
             except:
                         if ( keyword.lower() in parrafo_sin_acentos[cont].lower()) or (keyword_2.lower() in parrafo_sin_acentos[cont].lower() ): 
-                            return "SI"
+                             if (  soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
+                                            return "SI", "SI"
+                            
+                             return "NO","SI"
                         
                       #  elif ( keyword.lower() in parrafos[1].get_text().lower()) or (keyword_2.lower() in parrafos[1].get_text().lower() ): 
                          #       return "SI"
                             
                         else: 
-                            return "NO"
+                            return "NO", "NO"
                             
                         
                         
@@ -115,11 +123,11 @@ def kw_prim_p(soup,keyword):
         
        
         else:
-            return " "
+            return " ", " "
     
 
    #añadir validación para el caso particular de que no haya tag h1
     except:
-        return "H1 TAG NOT FOUND"
+        return  "NULL","H1 TAG NOT FOUND",
         
 

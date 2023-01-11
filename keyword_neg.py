@@ -40,7 +40,7 @@ def keyword_sub(soup,keyword):
     
     
     # se considera la kw dentro de etiquetas p, strong y b
-    if soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True):
+    if soup.find(["p","strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True):
    
         
         
