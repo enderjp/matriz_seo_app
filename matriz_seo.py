@@ -91,7 +91,7 @@ for i in range(len(file)):
                         len_title_h1,
                         'NO',
                         kw_subr,
-                        kw_primer_parrafo,
+                        kw_primer_parrafo[1],
                         'SI',
                         ' ',
                         ' ',
