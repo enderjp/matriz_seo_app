@@ -88,7 +88,9 @@ def kw_prim_p(soup,keyword):
                                
                            if (  soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
                                           return "SI", "SI"
-                           return "NO", "SI" 
+                           else:
+                               
+                               return "NO", "SI" 
                     
                         else: 
                                 return "NO", "NO"
@@ -99,7 +101,8 @@ def kw_prim_p(soup,keyword):
                              if (  soup.body.h1.find_all_next(["strong","b","span", "em > strong"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
                                             return "SI", "SI"
                             
-                             return "NO","SI"
+                             else:
+                                return "NO","SI"
                         
                       #  elif ( keyword.lower() in parrafos[1].get_text().lower()) or (keyword_2.lower() in parrafos[1].get_text().lower() ): 
                          #       return "SI"
