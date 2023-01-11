@@ -89,7 +89,7 @@ for i in range(len(file)):
                         have_kw_meta,
                         starts_with_kw,
                         len_title_h1,
-                        'SI',
+                        'NO',
                         kw_subr,
                         kw_primer_parrafo,
                         'SI',

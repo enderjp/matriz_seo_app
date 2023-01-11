@@ -128,6 +128,6 @@ def kw_prim_p(soup,keyword):
 
    #añadir validación para el caso particular de que no haya tag h1
     except:
-        return  "NULL","H1 TAG NOT FOUND",
+        return  "NULL","H1 TAG NOT FOUND"
         
 
