@@ -76,6 +76,7 @@ for i in range(len(file)):
    
     # añadida funcionalidad en funcion primer_parrafo
     kw_subr, kw_primer_parrafo = kw_primer_p.kw_prim_p(soup, keyword)
+    print(kw_subr)
     matriz_seo.loc[i] = [title_h1 ,  
                          ' ',
                         ' ',
@@ -91,7 +92,7 @@ for i in range(len(file)):
                         len_title_h1,
                         'NO',
                         kw_subr,
-                        kw_primer_parrafo[1],
+                        kw_primer_parrafo,
                         'SI',
                         ' ',
                         ' ',
