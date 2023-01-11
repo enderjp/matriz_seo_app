@@ -86,7 +86,7 @@ def kw_prim_p(soup,keyword):
                        
                         if ( keyword.lower() in parrafo_sin_acentos[cont].lower()) or (keyword_2.lower() in parrafo_sin_acentos[cont].lower() ): 
                                
-                           if (  soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
+                           if (soup.body.h1.find_all_next(["p","strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.body.h1.find_all_next(["p","strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
                                           return "SI", "SI"
                            else:
                                
@@ -98,7 +98,7 @@ def kw_prim_p(soup,keyword):
             # de no ser así y arroja error al verificar fecha, analizar igual si la keyword está alli
             except:
                         if ( keyword.lower() in parrafo_sin_acentos[cont].lower()) or (keyword_2.lower() in parrafo_sin_acentos[cont].lower() ): 
-                             if (  soup.body.h1.find_all_next(["strong","b","span", "em > strong"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.body.h1.find_all_next(["strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
+                             if (  soup.body.h1.find_all_next(["p","strong","b","span", "em > strong"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.body.h1.find_all_next(["p","strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
                                             return "SI", "SI"
                             
                              else:
