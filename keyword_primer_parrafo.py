@@ -93,11 +93,11 @@ def kw_prim_p(soup,keyword):
                               pattern2 = re.compile(r'(?:<(?:span|strong|b)[^>]*>){1,2}'+keyword_2.lower()+'(?:</(?:span|strong|b)>){1,2}|(?:<(?:em|strong)[^>]*>){2}'+keyword_2.lower()+'(?:</(?:em|strong)>){2}',re.IGNORECASE)  
                             
                            #if (soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
-                              if (pattern.search(quitar_acentos(str(parrafos[cont].lower()))) or pattern2.search(quitar_acentos(str(parrafos[cont].lower()))) ):
-                                  return "SI", "SI"
-                              else:
+                              # if (pattern.search(quitar_acentos(str(parrafos[cont].lower()))) or pattern2.search(quitar_acentos(str(parrafos[cont].lower()))) ):
+                              #     return "SI", "SI"
+                              # else:
                                
-                               return "NO", "SI" 
+                              #  return "NO", "SI" 
                     
                         else: 
                                 return "NO", "NO"
@@ -109,10 +109,10 @@ def kw_prim_p(soup,keyword):
                              pattern2 = re.compile(r'(?:<(?:span|strong|b)[^>]*>){1,2}'+keyword_2.lower()+'(?:</(?:span|strong|b)>){1,2}|(?:<(?:em|strong)[^>]*>){2}'+keyword_2.lower()+'(?:</(?:em|strong)>){2}',re.IGNORECASE)  
                            #  print(" Parrafo: ", parrafos[cont].lower())
                           #if (soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
-                             if (pattern.search(quitar_acentos(str(parrafos[cont].lower()))) or pattern2.search(quitar_acentos(str(parrafos[cont].lower()))) ):
-                                 return "SI", "SI"
-                             else:
-                                return "NO","SI"
+                             # if (pattern.search(quitar_acentos(str(parrafos[cont].lower()))) or pattern2.search(quitar_acentos(str(parrafos[cont].lower()))) ):
+                             #     return "SI", "SI"
+                             # else:
+                             #    return "NO","SI"
                         
                       #  elif ( keyword.lower() in parrafos[1].get_text().lower()) or (keyword_2.lower() in parrafos[1].get_text().lower() ): 
                          #       return "SI"
