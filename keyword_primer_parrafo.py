@@ -37,8 +37,9 @@ def kw_prim_p(soup,keyword):
         if  soup.body.h1.find_all_next("p", limit=4):  # Se extraen los 2 primeros párrafos luego de tag h1
             parrafos = soup.body.h1.find_all_next("p", limit=4)
             
-            # en caso que no esté con acentos en el párrafo
-            keyword_2 = quitar_tildes(keyword)
+            
+            # se toma la keyword sin acentos, por si en el artículo no lo tiene 
+            keyword_2 = quitar_acentos(keyword).lower()
             #segundo_parrafo = soup.find("p").get_text().lower()
             
             
@@ -48,7 +49,7 @@ def kw_prim_p(soup,keyword):
             
             parrafo_sin_acentos = []
             for parrafo in parrafos:
-                x = parrafo.get_text()
+                x = parrafo.get_text().lower()
                 x = quitar_acentos(x)
                 parrafo_sin_acentos.append(x)
             
@@ -62,38 +63,19 @@ def kw_prim_p(soup,keyword):
               
                 
             # # Si hay una fecha y el parrafo es muy corto, revisa si está 
-            # try:
-            #         if  dparser.parse(parrafos[cont].get_text(), fuzzy=True) and len(parrafos[cont].get_text() < 50): # si hay una fecha
-                       
-            #             if ( keyword.lower() in parrafos[cont].get_text().lower()) or (keyword_2.lower() in parrafos[cont].get_text().lower() ): 
-            #                      return "SI" 
-                    
-            #             else: 
-            #                     return "NO"
-                    
-            # # de no ser así y arroja error al verificar fecha, analizar igual si la keyword está alli
-            # except:
-            #             if ( keyword.lower() in parrafos[cont].get_text().lower()) or (keyword_2.lower() in parrafos[cont].get_text().lower() ): 
-            #                 return "SI"
-                        
-            #           #  elif ( keyword.lower() in parrafos[1].get_text().lower()) or (keyword_2.lower() in parrafos[1].get_text().lower() ): 
-            #              #       return "SI"
-                            
-            #             else: 
-            #                 return "NO"
+            
             try:
                     if  dparser.parse(parrafo_sin_acentos[cont], fuzzy=True) and len(parrafo_sin_acentos[cont] < 50): # si hay una fecha
                        
-                        if ( keyword.lower() in parrafo_sin_acentos[cont].lower()) or (keyword_2.lower() in parrafo_sin_acentos[cont].lower() ): 
+                        if ( keyword_2 in parrafo_sin_acentos[cont] ): 
                                
-                              # expresión regular para determinar si en el primer párrafo está la keyword subrayada
-                            #  pattern = re.compile(r'(?:<(?:span|strong|b)[^>]*>){1,2}'+keyword.lower()+'(?:</(?:span|strong|b)>){1,2}|(?:<(?:em|strong)[^>]*>){2}'+keyword.lower()+'(?:</(?:em|strong)>){2}',re.IGNORECASE)  
-                            #  pattern2 = re.compile(r'(?:<(?:span|strong|b)[^>]*>){1,2}'+keyword_2.lower()+'(?:</(?:span|strong|b)>){1,2}|(?:<(?:em|strong)[^>]*>){2}'+keyword_2.lower()+'(?:</(?:em|strong)>){2}',re.IGNORECASE)  
-                            
-                           if (soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
-                             # if (pattern.search(str(parrafo_sin_acentos[cont].lower())) or pattern2.search(str(parrafo_sin_acentos[cont].lower())) ):
+                            # expresión regular para determinar si en el primer párrafo está la keyword subrayada
+                                      # se  consideran las etiquetas strong, b, span y em-strong
+                            match = re.search(r"(<(strong|b|span|em)>.*?" + keyword_2 + "[.,]?.*?</(strong|b|span|em)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",quitar_acentos(str(parrafos[cont])).lower())
+
+                            if (match):
                               return "SI", "SI"
-                           else:
+                            else:
                                
                                return "NO", "SI" 
                     
@@ -102,42 +84,28 @@ def kw_prim_p(soup,keyword):
                     
             # de no ser así y arroja error al verificar fecha, analizar igual si la keyword está alli
             except:
-                        if ( keyword.lower() in parrafo_sin_acentos[cont].lower()) or (keyword_2.lower() in parrafo_sin_acentos[cont].lower() ): 
-                           #  pattern = re.compile(r'(?:<(?:span|strong|b)[^>]*>){1,2}'+keyword.lower()+'(?:</(?:span|strong|b)>){1,2}|(?:<(?:em|strong)[^>]*>){2}'+keyword.lower()+'(?:</(?:em|strong)>){2}',re.IGNORECASE)  
-                            # pattern2 = re.compile(r'(?:<(?:span|strong|b)[^>]*>){1,2}'+keyword_2.lower()+'(?:</(?:span|strong|b)>){1,2}|(?:<(?:em|strong)[^>]*>){2}'+keyword_2.lower()+'(?:</(?:em|strong)>){2}',re.IGNORECASE)  
-                            # print(" Parrafo: ", parrafo_sin_acentos[cont].lower())
-                          if (soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(quitar_acentos(keyword)),flags=re.IGNORECASE), recursive=True) or soup.find_all(["p","strong","b","span"],string=re.compile('^{0}$'.format(keyword),flags=re.IGNORECASE), recursive=True) ):      
-                           ##  if (pattern.search(str(parrafo_sin_acentos[cont].lower())) or pattern2.search(str(parrafo_sin_acentos[cont].lower())) ):
-                                 return "SI", "SI"
-                          else:
-                                return "NO","SI"
+                        if ( keyword_2 in parrafo_sin_acentos[cont] ): 
+                             
+                             match = re.search(r"(<(strong|b|span|em)>.*?" + keyword_2 + "[.,]?.*?</(strong|b|span|em)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",quitar_acentos(str(parrafos[cont])).lower())
+
+                             if (match):
+                                  return "SI", "SI"
+                             else:
+                               
+                               return "NO", "SI" 
                         
-                      #  elif ( keyword.lower() in parrafos[1].get_text().lower()) or (keyword_2.lower() in parrafos[1].get_text().lower() ): 
-                         #       return "SI"
-                            
+                    
                         else: 
                             return "NO", "NO"
                             
                         
-                        
-                            
-            
-                            
-           # elif soup.find("h2"): # modificado el if por elif
-          #      parrafos = soup.find("h2")
-              
-                #segundo_parrafo = soup.find("p").get_text().lower()
-             #   if keyword.lower() in parrafos.get_text().lower():
-             #       return "SI"
-             #   else:
-             #       return "NO"
-        
+                  
        
         else:
             return " ", " "
     
 
-   #añadir validación para el caso particular de que no haya tag h1
+    #añadir validación para el caso particular de que no haya tag h1
     except:
         return  "NULL","H1 TAG NOT FOUND"
         
