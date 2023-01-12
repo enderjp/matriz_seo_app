@@ -8,6 +8,7 @@ from quitar_tildes import quitar_tildes
 import dateutil.parser as dparser
 import unicodedata
 import re 
+import streamlit as st
 # funcion para quitar acentos de una frase/párrafo
 def quitar_acentos(string):
     
@@ -81,6 +82,7 @@ def kw_prim_p(soup,keyword):
                             
             #             else: 
             #                 return "NO"
+            st.write(quitar_acentos(str(parrafos[cont].lower())))
             try:
                     if  dparser.parse(parrafo_sin_acentos[cont], fuzzy=True) and len(parrafo_sin_acentos[cont] < 50): # si hay una fecha
                        
