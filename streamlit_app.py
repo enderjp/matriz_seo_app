@@ -8,7 +8,8 @@ Created on Tue Dec 13 11:19:27 2022
 import streamlit as st
 
 
-
+import warnings
+warnings.filterwarnings("ignore")
 
 import requests
 import pandas as pd
@@ -94,6 +95,16 @@ if uploaded_file:
             
             # Se obtiene parte del contenido de la URL
             
+            
+            if ( pd.isna(file.loc[i][0])  or pd.isna(file.loc[i][1]) ):
+                
+                with st.sidebar:
+                
+                    string = "Falta la url o la keyword #%s. Aplicación detenida"%(i+1)
+                    st.warning(string,icon="⚠️")
+                  
+                    st.stop
+                    
             # usar un try y except para manejar el error de SSL certificate
             try: 
                 try:
