@@ -27,21 +27,17 @@ try:
 except ImportError:
     from io import StringIO 
     
-import time
     
+# Info visual de la web app
 st.title("Matriz SEO")
-
 st.write("Adjuntar archivo con las urls")
-
 uploaded_file = st.file_uploader(label= "Elegir archivo",label_visibility= 'hidden')
 
 
-    
+# Cargar archivo
 if uploaded_file is not None:
-#read csv
-   # df1=pd.read_csv(uploaded_file)
 
-   #read xls or xlsx
+   #xls or xlsx
    file=pd.read_excel(uploaded_file)
 else:
     st.warning("El archivo debe ser de tipo .xlsx")
@@ -52,7 +48,7 @@ if uploaded_file:
   
     
     # Leer archivo excel con URLs y keywords
-    #file = pd.read_excel('urls_movistar.xlsx')  
+   
     
     
     matriz_seo = pd.DataFrame( columns=['Titulo',
@@ -92,15 +88,15 @@ if uploaded_file:
     
     
     # lista para llevar un control del caso especial donde la keyword esta
-    # subrayada junto a toda una oracion/frase
+    # subrayada junto a toda una oración/frase
     sub_caso_special =[]
        
     with st.container():
         for i in range(len(file)):
             
-            # Se obtiene parte del contenido de la URL
+           
             
-            
+             # si falta la url o el keyword #i en el archivo
             if ( pd.isna(file.loc[i][0])  or pd.isna(file.loc[i][1]) ):
                 
                 with st.sidebar:
@@ -108,9 +104,9 @@ if uploaded_file:
                     string = "Falta la url o la keyword #%s. Aplicación detenida"%(i+1)
                     st.warning(string,icon="⚠️")
                   
-                    st.stop
+                    st.stop # se detiene la app
                     
-            # usar un try y except para manejar el error de SSL certificate
+            #  Manejar el error de SSL certificate
             try: 
                 try:
                     page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'})
@@ -122,17 +118,18 @@ if uploaded_file:
                     page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'},verify=False)
                 except:
                     page = requests.get(file.loc[i][0],headers= {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0'}, verify= False )
+           
             keyword = file.loc[i][1]
             
             # validación para ignorar todo caracter que no sea una letra o un número en la keyword
-            
             keyword = re.sub(r'[^A-Za-zÀ-ÖØ-öø-ÿ-Z0-9 ]', '', keyword)
             if keyword[-1] == "-":
                 keyword = keyword.rstrip(keyword[-1])
             keyword = keyword.strip()
-            keyword=  " ".join( keyword.split() ) # eliminar espacios dentro de la string
-            # añadir validación si la página está disponible
+            keyword=  " ".join( keyword.split() ) # eliminar espacios dentro de la keyword
+            # por ejemplo "la  comunicación" (hay 1 espacio adicional)
             
+            # añadir validación si la página está disponible
             if "404"  in str(page):
                 
                 matriz_seo.loc[i] = ["ERROR 404" ,  
@@ -170,15 +167,7 @@ if uploaded_file:
             #####################################################
             
             soup = BeautifulSoup(page.content, 'html.parser')
-            
-            
-           # keyword = file.loc[i][1].strip()
-            
-            # si en el archivo de keywords al final hay un punto, eliminarlo
-           # if keyword[-1] == ".":
-                
-            #    keyword = keyword.rstrip(keyword[-1])
-            
+           
             
             len_title_seo, have_kw_title_seo = inf_seo.get_title_seo(soup, keyword)
             len_description, have_kw_meta = inf_seo.get_description(soup, keyword)
@@ -188,6 +177,7 @@ if uploaded_file:
             titles_h1_seo_same.append(title_seo_h1_diferentes(soup))
             kw_subr, kw_primer_parrafo, caso_especial = kw_primer_p.kw_prim_p(soup, keyword)
             
+            # se añade False o True si se da el caso especial de kw subrayada
             sub_caso_special.append(caso_especial)
             
             matriz_seo.loc[i] = [title_h1 ,  
@@ -222,21 +212,20 @@ if uploaded_file:
             bar.progress(int(100 * (i+1) / len(file)) )
             st.write( "URLS PROCESADAS: ",i+1 )
             st.write("keyword :", keyword)
-        #matriz_seo.to_excel("output.xlsx")  
-        
+          
             
-       # time.sleep(0.1)
-        #writer = pd.ExcelWriter('output.xlsx', engine='xlsxwriter')
+        # fin del recorrido de las urls
+        ########################################
+    
         from io import BytesIO
         output = BytesIO()
-        # Create a Pandas Excel writer using XlsxWriter as the engine.
+        # crear archivo Excel
         writer = pd.ExcelWriter(output, engine='xlsxwriter')
         
-        # Convert the dataframe to an XlsxWriter Excel object.
+        # Convertir Dataframe a excel
         matriz_seo.to_excel(writer, sheet_name='MATRIZ DE SEO', index=False)
         
-        # Write data to an excel
-        
+       
         # Get workbook
         workbook = writer.book
         
@@ -248,6 +237,17 @@ if uploaded_file:
         cell_format.set_font_size(11)
         cell_format.set_border()
         worksheet.set_column('A:Z', None, cell_format)
+        
+        
+        # background = workbook.add_format({'bg_color': '#44546A'})
+
+        # # Add the rule to column A.
+        # x= str(len(file)+1)
+        # formato = 'H2:W'+x
+        # worksheet.conditional_format(formato, {'type': 'cell',
+        #                              'criteria': 'equal to',
+        #                              'value': '"NO"',
+        #                              'format': background})
         
         for i in range(len(file)):
             if titles_h1_seo_same[i] == 'NO':
