@@ -4,6 +4,8 @@ Created on Thu Oct 27 17:41:08 2022
 
 @author: darwi
 """
+import streamlit as st
+
 from quitar_tildes import quitar_tildes
 import dateutil.parser as dparser
 import unicodedata
@@ -47,11 +49,11 @@ def kw_prim_p(soup,keyword):
             # que probablemente no tengan contenido como tal
             cont=0 # con esta vaariable establecemos dónde considerar el primer párrafo válido
             
-            parrafo_sin_acentos = []
-            for parrafo in parrafos:
-                x = parrafo.get_text().lower()
-                x = quitar_acentos(x)
-                parrafo_sin_acentos.append(x)
+           # parrafo_sin_acentos = []
+            # for parrafo in parrafos:
+            #     x = parrafo.get_text().lower()
+            #     x = quitar_acentos(x)
+            #     parrafo_sin_acentos.append(x)
             
             
             for  parrafo in parrafos:
@@ -60,53 +62,84 @@ def kw_prim_p(soup,keyword):
                    cont+=1
                else:
                    break
-              
-                
+               
+            parrafo_sin_acentos = parrafos[cont].get_text().lower() 
+            parrafo_sin_acentos = quitar_acentos(parrafo_sin_acentos)
+            
+           # eliminar espacios adicionales entre las palabras
+            parrafo_sin_acentos = " ".join( parrafo_sin_acentos.split() ) 
+            
+           
+           # hacer lo mismo a la string con codigo html para hacer operaciones
+            primer_parrafo = " ".join( quitar_acentos(str(parrafos[cont])).lower().split() )
+            
             # # Si hay una fecha y el parrafo es muy corto, revisa si está 
             
             try:
-                    if  dparser.parse(parrafo_sin_acentos[cont], fuzzy=True) and len(parrafo_sin_acentos[cont] < 50): # si hay una fecha
-                       
-                        if ( keyword_2 in parrafo_sin_acentos[cont] ): 
+                    if  dparser.parse(parrafo_sin_acentos, fuzzy=True) and len(parrafo_sin_acentos < 50): # si hay una fecha
+                        if ( keyword_2 in parrafo_sin_acentos ): 
                                
                             # expresión regular para determinar si en el primer párrafo está la keyword subrayada
-                                      # se  consideran las etiquetas strong, b, span y em-strong
-                            match = re.search(r"(<(strong|b|span|em)>.*?" + keyword_2 + "[.,]?.*?</(strong|b|span|em)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",quitar_acentos(str(parrafos[cont])).lower())
+                                      # se  consideran las etiquetas strong, b, span, u y em-strong
+                            match = re.search(r"(<(strong|b|span|em|u).*>.?" + keyword_2 + "[.,]?.?</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
 
                             if (match):
-                              return "SI", "SI"
+                              return "SI", "SI", False
+                          
+                            if (not match):
+                               
+                                
+                                match2 = re.search(r"(<(strong|b|span|em|u).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                
+                                if (not match2):
+                                    return "NO", "SI", False
+                                if (match2):
+                                    return "SI", "SI", True
+                          
                             else:
                                
-                               return "NO", "SI" 
+                               return "NO", "SI" , False
                     
                         else: 
-                                return "NO", "NO"
+                                return "NO", "NO", False
                     
             # de no ser así y arroja error al verificar fecha, analizar igual si la keyword está alli
             except:
-                        if ( keyword_2 in parrafo_sin_acentos[cont] ): 
+                       
+                        if ( keyword_2 in parrafo_sin_acentos ): 
+                             match = re.search(r"(<(strong|b|span|em|u).*>.?" + keyword_2 + "[.,]?.?</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                              
-                             match = re.search(r"(<(strong|b|span|em)>.*?" + keyword_2 + "[.,]?.*?</(strong|b|span|em)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",quitar_acentos(str(parrafos[cont])).lower())
-
                              if (match):
-                                  return "SI", "SI"
+                                  return "SI", "SI", False
+                              
+                             if (not match):
+                                    
+                                match2 = re.search(r"(<(strong|b|span|em|u).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                if (not match2):
+                                       
+                                    return "NO", "SI", False
+                                if (match2):
+                                         return "SI", "SI", True
+                                     
+                                     
+                                    
                              else:
                                
-                               return "NO", "SI" 
+                               return "NO", "SI" , False
                         
                     
                         else: 
-                            return "NO", "NO"
+                            return "NO", "NO", False
                             
                         
                   
        
         else:
-            return " ", " "
+            return " ", " ", False
     
 
     #añadir validación para el caso particular de que no haya tag h1
     except:
-        return  "NULL","H1 TAG NOT FOUND"
+        return  "NULL","H1 TAG NOT FOUND", False
         
 

@@ -89,6 +89,11 @@ if uploaded_file:
     
     # lista para llevar un control de los comentarios de titulo H1 y SEO iguales
     titles_h1_seo_same =[]
+    
+    
+    # lista para llevar un control del caso especial donde la keyword esta
+    # subrayada junto a toda una oracion/frase
+    sub_caso_special =[]
        
     with st.container():
         for i in range(len(file)):
@@ -125,6 +130,7 @@ if uploaded_file:
             if keyword[-1] == "-":
                 keyword = keyword.rstrip(keyword[-1])
             keyword = keyword.strip()
+            keyword=  " ".join( keyword.split() ) # eliminar espacios dentro de la string
             # añadir validación si la página está disponible
             
             if "404"  in str(page):
@@ -154,15 +160,18 @@ if uploaded_file:
                                     "ERROR 404"
                                  ]
                 
-                # se añade un null a la lista de comparación de titulos 
+                # se añade un null a la lista de comparación de titulos y caso especial
                 # para mantener la misma longitud
                 titles_h1_seo_same.append("NULL")
+                sub_caso_special.append(False)
                 continue
             
             
             #####################################################
             
             soup = BeautifulSoup(page.content, 'html.parser')
+            
+            
            # keyword = file.loc[i][1].strip()
             
             # si en el archivo de keywords al final hay un punto, eliminarlo
@@ -177,7 +186,9 @@ if uploaded_file:
             
             #se añade a la lista un SI o NO, dependiendo si el titulo H1 Y seo son iguales
             titles_h1_seo_same.append(title_seo_h1_diferentes(soup))
-            kw_subr, kw_primer_parrafo = kw_primer_p.kw_prim_p(soup, keyword)
+            kw_subr, kw_primer_parrafo, caso_especial = kw_primer_p.kw_prim_p(soup, keyword)
+            
+            sub_caso_special.append(caso_especial)
             
             matriz_seo.loc[i] = [title_h1 ,  
                                  ' ',
@@ -243,7 +254,8 @@ if uploaded_file:
               #  worksheet.write('A1', 'Hello')
                 worksheet.write_comment('M%s'%(i+2), 'Título H1 duplicado')
         
-            
+            if sub_caso_special[i]==True:
+                worksheet.write_comment('O%s'%(i+2), 'Hay texto adicional subrayado junto con la palabra clave')
         
         writer.close()
         
