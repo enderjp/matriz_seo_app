@@ -90,6 +90,9 @@ if uploaded_file:
     # lista para llevar un control del caso especial donde la keyword esta
     # subrayada junto a toda una oración/frase
     sub_caso_special =[]
+    
+    # lista para mostrar mensaje de titulo seo no vinculante
+    title_seo = []
        
     with st.container():
         for i in range(len(file)):
@@ -161,6 +164,7 @@ if uploaded_file:
                 # para mantener la misma longitud
                 titles_h1_seo_same.append("NULL")
                 sub_caso_special.append(False)
+                title_seo.append(None)
                 continue
             
             
@@ -179,6 +183,7 @@ if uploaded_file:
             
             # se añade False o True si se da el caso especial de kw subrayada
             sub_caso_special.append(caso_especial)
+            title_seo.append(have_kw_title_seo)
             
             matriz_seo.loc[i] = [title_h1 ,  
                                  ' ',
@@ -257,6 +262,9 @@ if uploaded_file:
             if sub_caso_special[i]==True:
                 worksheet.write_comment('O%s'%(i+2), 'Hay texto adicional subrayado junto con la palabra clave')
         
+            if (title_seo[i] == 'NO'):
+                worksheet.write_comment('I%s'%(i+2), 'Título diferente al propuesto')
+
         writer.close()
         
       
