@@ -58,7 +58,7 @@ def kw_prim_p(soup,keyword):
             
             for  parrafo in parrafos:
                string = " ".join(parrafo.get_text().split() ) #quitamos espacios adicionales
-               if len(string) < 40:
+               if len(string) < 60:
                    cont+=1
                    print(parrafo.get_text(), " ", len(parrafo.get_text()))
                else:
@@ -77,7 +77,7 @@ def kw_prim_p(soup,keyword):
             # # Si hay una fecha y el parrafo es muy corto, revisa si está 
             
             try:
-                    if  dparser.parse(parrafo_sin_acentos, fuzzy=True) and len(parrafo_sin_acentos < 50): # si hay una fecha
+                    if  dparser.parse(parrafo_sin_acentos, fuzzy=True) and len(parrafo_sin_acentos < 60): # si hay una fecha
                         if ( keyword_2 in parrafo_sin_acentos ): 
                                
                             # expresión regular para determinar si en el primer párrafo está la keyword subrayada
