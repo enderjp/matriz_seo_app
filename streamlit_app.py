@@ -20,6 +20,8 @@ import keyword_primer_parrafo as kw_primer_p
 import url_tam_fecha as url
 import obtener_fecha_publicacion as fecha_public
 from titulos_metadescripcion import title_seo_h1_diferentes
+from quitar_tildes import quitar_tildes
+
 import re
 #from titulos_metadescripcion import *
 try:
@@ -128,7 +130,8 @@ if uploaded_file:
             keyword = re.sub(r'[^A-Za-zÀ-ÖØ-öø-ÿ-Z0-9 ]', '', keyword)
             if keyword[-1] == "-":
                 keyword = keyword.rstrip(keyword[-1])
-            keyword = keyword.strip()
+            keyword = keyword.strip().lower()
+            keyword = quitar_tildes(keyword)
             keyword=  " ".join( keyword.split() ) # eliminar espacios dentro de la keyword
             # por ejemplo "la  comunicación" (hay 1 espacio adicional)
             
@@ -178,7 +181,7 @@ if uploaded_file:
             title_h1,len_title_h1, starts_with_kw= inf_seo.get_title_h1(soup, keyword)
             
             #se añade a la lista un SI o NO, dependiendo si el titulo H1 Y seo son iguales
-            titles_h1_seo_same.append(title_seo_h1_diferentes(soup))
+            titles_h1_seo_same.append(title_seo_h1_diferentes(soup,keyword))
             kw_subr, kw_primer_parrafo, caso_especial = kw_primer_p.kw_prim_p(soup, keyword)
             
             # se añade False o True si se da el caso especial de kw subrayada
@@ -273,7 +276,7 @@ if uploaded_file:
       
         with st.sidebar:
    
-            st.download_button(label='Descargar archivo', data=output.getvalue(), file_name='MATRIZ SEO.xlsx',mime="application/vnd.ms-excel",     
+            st.download_button(label='Descargar archivo', data=output.getvalue(), file_name='MATRIZ PRUEBA ENERO.xlsx',mime="application/vnd.ms-excel",     
                                on_click=st.stop)
         
     

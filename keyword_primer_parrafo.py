@@ -41,7 +41,7 @@ def kw_prim_p(soup,keyword):
             
             
             # se toma la keyword sin acentos, por si en el artículo no lo tiene 
-            keyword_2 = quitar_acentos(keyword).lower()
+            keyword_2 = quitar_acentos(keyword)
             #segundo_parrafo = soup.find("p").get_text().lower()
             
             
@@ -80,8 +80,11 @@ def kw_prim_p(soup,keyword):
                     if  dparser.parse(parrafo_sin_acentos, fuzzy=True) and len(parrafo_sin_acentos < 60): # si hay una fecha
                         if ( keyword_2 in parrafo_sin_acentos ): 
                                
-                            # expresión regular para determinar si en el primer párrafo está la keyword subrayada
-                                      # se  consideran las etiquetas strong, b, span, u y em-strong
+                         
+                                
+                                
+                          # expresión regular para determinar si en el primer párrafo está la keyword subrayada
+                                                # se  consideran las etiquetas strong, b, span, u y em-strong
                             match = re.search(r"(<(strong|b|span|em|u).*>.?" + keyword_2 + "[.,]?.?</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
 
                             if (match):
@@ -92,10 +95,31 @@ def kw_prim_p(soup,keyword):
                                 
                                 match2 = re.search(r"(<(strong|b|span|em|u).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                 
-                                if (not match2):
-                                    return "NO", "SI", False
                                 if (match2):
                                     return "SI", "SI", True
+                                if (not match2):
+                                    
+                                    # si la kw tiene mas de 1 palabra
+                                      if (len(keyword_2.split()) > 1):
+                                          contador_keyword = 0
+                                          palabras_keyword = keyword_2.split()
+                                         
+                                          for palabra in palabras_keyword:
+                                              match = re.search(r"(<(strong|b|span|em|u).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                              if (match):
+                                                  contador_keyword+=1
+                                                
+
+                                          if (contador_keyword == len(palabras_keyword)):
+                                              return "SI", "SI", False
+                                          
+                                          else:
+                                              return "NO", "SI", False
+                                    
+                                          
+                                      else:
+                                         return "NO", "SI", False
+                                
                           
                             else:
                                
@@ -116,12 +140,30 @@ def kw_prim_p(soup,keyword):
                              if (not match):
                                     
                                 match2 = re.search(r"(<(strong|b|span|em|u).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
-                                if (not match2):
-                                       
-                                    return "NO", "SI", False
+                                
                                 if (match2):
                                          return "SI", "SI", True
-                                     
+                                if (not match2):
+                                    # si la kw tiene mas de 1 palabra
+                                      if (len(keyword_2.split()) > 1):
+                                          contador_keyword = 0
+                                          palabras_keyword = keyword_2.split()
+                                         
+                                          for palabra in palabras_keyword:
+                                              match = re.search(r"(<(strong|b|span|em|u).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                              if (match):
+                                                  contador_keyword+=1
+                                               
+
+                                          if (contador_keyword == len(palabras_keyword)):
+                                              return "SI", "SI", False
+                                          
+                                          else:
+                                              return "NO", "SI", False
+                                    
+                                    
+                                      else:
+                                         return "NO", "SI", False   
                                      
                                     
                              else:

@@ -28,19 +28,26 @@ def quitar_acentos(string):
 
     return resultado
 
-def title_seo_h1_diferentes(soup):
+def title_seo_h1_diferentes(soup,keyword):
     
     if  soup.find("title") and  soup.find("h1") :
+        
+        
+        if len(soup.findAll("h1")) > 1 :
+            title_h1 = buscar_titulo_h1(soup, keyword)
+            
+        else: 
+            title_h1 = soup.find("h1").get_text().strip().lower()
+            title_h1 = quitar_tildes(title_h1)
      
-         title_seo  = soup.find("title").get_text().strip().lower()
-         title_seo = quitar_tildes(title_seo)
+        title_seo  = soup.find("title").get_text().strip().lower()
+        title_seo = quitar_tildes(title_seo)
          
-         title_h1 = soup.find("h1").get_text().strip().lower()
-         title_h1 = quitar_tildes(title_h1)
          
-         if title_seo.startswith(title_h1):
+         
+        if title_seo.startswith(title_h1):
              return "NO"
-         else:
+        else:
              return "SI"
     
     else:
@@ -55,11 +62,11 @@ def get_title_seo(soup,keyword):
     Returns: 
         value (string): Parsed value
     """
-    keyword = quitar_acentos(keyword)
+    
 
     if soup.findAll("title"):
         title_seo = soup.find("title").get_text().strip()
-        title_seo = quitar_acentos(title_seo)
+        title_seo = quitar_acentos(title_seo).lower()
         # Chequear longitud
         if len(title_seo) > 70:
             len_title_seo = "No"
@@ -67,7 +74,7 @@ def get_title_seo(soup,keyword):
             len_title_seo = "SI"
             
         # Chequear si contiene el keyword
-        if keyword.lower() in title_seo.lower():
+        if keyword in title_seo:
             have_kw =  "SI"
         else:
             have_kw =  "NO"
@@ -78,6 +85,21 @@ def get_title_seo(soup,keyword):
         return "Titulo SEO no encontrado", "Nulo"
 
     
+def buscar_titulo_h1(soup, keyword):
+    
+    titulos = soup.findAll("h1")
+    title = ""
+    for titulo in titulos:
+        titulo = titulo.get_text().strip().lower()
+        titulo= quitar_acentos(titulo)
+       
+        if keyword in titulo:
+            
+            return titulo
+       # print(title_h1)
+   
+    return title
+
 def get_title_h1(soup,keyword):
     """Return the page title
 
@@ -87,20 +109,27 @@ def get_title_h1(soup,keyword):
     Returns: 
         value (string): Parsed value
     """
+       
 
     if soup.findAll("h1"):
-        title_h1 = soup.find("h1").get_text().strip()
-        title_h1 = quitar_acentos(title_h1)
-        print(title_h1)
+        
+        if len(soup.findAll("h1")) > 1 :
+            title_h1 = buscar_titulo_h1(soup, keyword)
+          
+        else:
+            
+            title_h1 = soup.find("h1").get_text().strip()
+            title_h1 = quitar_acentos(title_h1).lower()
+           # print(title_h1)
         # chequear si contiene el keyword al inicio
-        if title_h1.lower().startswith(keyword.lower()):
+        if title_h1.startswith(keyword):
             starts_with_kw = "SI"
             
        
-        elif  keyword.lower() in title_h1.lower() :  
+        elif  keyword in title_h1 :  
             
                     # indice del comienzo de la keyword
-                 if len(title_h1.lower()[0:title_h1.lower().index(keyword.lower())]) <= 14:
+                 if len(title_h1[0:title_h1.index(keyword)]) <= 14:
                     starts_with_kw = "SI"
                  else:
                      starts_with_kw = "NO"
@@ -128,14 +157,14 @@ def get_description(soup, keyword):
     if soup.findAll("meta", attrs={"name": "description"}):
         description = soup.find("meta", attrs={"name": "description"}).get("content")
         description = quitar_acentos(description)
-        keyword = quitar_acentos(keyword)
+       
         
         if len(description) >= 156:
             len_description= "NO"
         else:
             len_description = "SI"
        
-        if keyword.lower() in description.lower():
+        if keyword in description.lower():
             have_kw =  "SI"
         else:
             have_kw =  "NO"
@@ -144,14 +173,14 @@ def get_description(soup, keyword):
     elif soup.findAll("meta", attrs={"property": "og:description"}):
         description = soup.find("meta", attrs={"property": "og:description"}).get("content")
         description = quitar_acentos(description)
-        keyword = quitar_acentos(keyword)
+        
         
         if len(description) >= 156:
             len_description= "NO"
         else:
             len_description = "SI"
        
-        if keyword.lower() in description.lower():
+        if keyword in description.lower():
             have_kw =  "SI"
         else:
             have_kw =  "NO"
