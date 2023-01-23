@@ -57,9 +57,10 @@ def kw_prim_p(soup,keyword):
             
             
             for  parrafo in parrafos:
-                 
-               if len(parrafo.get_text()) < 40:
+               string = " ".join(parrafo.get_text().split() ) #quitamos espacios adicionales
+               if len(string) < 40:
                    cont+=1
+                   print(parrafo.get_text(), " ", len(parrafo.get_text()))
                else:
                    break
                

@@ -254,6 +254,8 @@ if uploaded_file:
         #                              'value': '"NO"',
         #                              'format': background})
         
+        
+        #------------- añadir comentarios al excel  ------------#
         for i in range(len(file)):
             if titles_h1_seo_same[i] == 'NO':
               #  worksheet.write('A1', 'Hello')
@@ -265,6 +267,7 @@ if uploaded_file:
             if (title_seo[i] == 'NO'):
                 worksheet.write_comment('I%s'%(i+2), 'Título diferente al propuesto')
 
+        #----------------------------------------------
         writer.close()
         
       
