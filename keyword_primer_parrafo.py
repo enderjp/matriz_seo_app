@@ -132,14 +132,14 @@ def kw_prim_p(soup,keyword):
             except:
                        
                         if ( keyword_2 in parrafo_sin_acentos ): 
-                             match = re.search(r"(<(strong|b|span|em|u).*>.?" + keyword_2 + "[.,]?.?</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                             match = re.search(r"(<(strong|b|span|em|u|i).*>.?" + keyword_2 + "[.,]?.?</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                              
                              if (match):
                                   return "SI", "SI", False
                               
                              if (not match):
                                     
-                                match2 = re.search(r"(<(strong|b|span|em|u).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                match2 = re.search(r"(<(strong|b|span|em|u|i).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                 
                                 if (match2):
                                          return "SI", "SI", True
@@ -150,7 +150,7 @@ def kw_prim_p(soup,keyword):
                                           palabras_keyword = keyword_2.split()
                                          
                                           for palabra in palabras_keyword:
-                                              match = re.search(r"(<(strong|b|span|em|u).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                              match = re.search(r"(<(strong|b|span|em|u|i).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                               if (match):
                                                   contador_keyword+=1
                                                
