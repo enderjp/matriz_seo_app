@@ -260,7 +260,7 @@ if uploaded_file:
         
         #------------- añadir comentarios al excel  ------------#
         for i in range(len(file)):
-            if titles_h1_seo_same[i] == 'NO':
+            if titles_h1_seo_same[i] == 'SI':
               #  worksheet.write('A1', 'Hello')
                 worksheet.write_comment('M%s'%(i+2), 'Título H1 duplicado')
         

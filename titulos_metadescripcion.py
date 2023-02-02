@@ -46,9 +46,11 @@ def title_seo_h1_diferentes(soup,keyword):
          
          
         if title_seo.startswith(title_h1):
-             return "NO"
+             substring = title_seo.split(" -")[0].split(" |")[0].split(" :")[0]
+             if substring == title_h1 :
+                 return "SI"
         else:
-             return "SI"
+             return "NO"
     
     else:
         return "NULL"
