@@ -10,6 +10,7 @@ from quitar_tildes import quitar_tildes
 import dateutil.parser as dparser
 import unicodedata
 import re 
+from keyword_resaltada import texto_no_resaltado
 # funcion para quitar acentos de una frase/párrafo
 def quitar_acentos(string):
     
@@ -96,7 +97,14 @@ def kw_prim_p(soup,keyword):
                                 match2 = re.search(r"(<(strong|b|span|em|u).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                 
                                 if (match2):
-                                    return "SI", "SI", True
+                                       # si hay mas 1 hijo  en la etiqueta p
+                                       keyword_resaltada = texto_no_resaltado(parrafos[cont].contents)
+                                       if keyword_resaltada:
+                                           
+                                           return "SI", "SI", True
+                                       else:
+                                           return "NO", "SI", False
+                                    
                                 if (not match2):
                                     
                                     # si la kw tiene mas de 1 palabra
@@ -142,7 +150,14 @@ def kw_prim_p(soup,keyword):
                                 match2 = re.search(r"(<(strong|b|span|em|u|i).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                 
                                 if (match2):
-                                         return "SI", "SI", True
+                                          # si hay mas 1 hijo  en la etiqueta p
+                                            keyword_resaltada = texto_no_resaltado(parrafos[cont].contents)
+                                            if keyword_resaltada:
+                                                
+                                                return "SI", "SI", True
+                                            else:
+                                                return "NO", "SI", False
+                                       
                                 if (not match2):
                                     # si la kw tiene mas de 1 palabra
                                       if (len(keyword_2.split()) > 1):
