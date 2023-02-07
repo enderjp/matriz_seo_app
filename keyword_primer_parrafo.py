@@ -61,7 +61,9 @@ def keyword_primer_parrafo(soup,keyword):
                    print(parrafo.get_text(), " ", len(parrafo.get_text()))
                else:
                    break
-               
+            st.write( "contador",cont )
+            st.write( "parrafos ",parrafos)
+
             parrafo_sin_acentos = parrafos[cont].get_text().lower() 
             parrafo_sin_acentos = quitar_acentos(parrafo_sin_acentos)
             
