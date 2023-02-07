@@ -35,10 +35,10 @@ def keyword_primer_parrafo(soup,keyword):
 
     """
     
-    try:
+  #  try:
          
     
-        if  soup.body.h1.find_all_next("p", limit=4):  # Se extraen los 2 primeros párrafos luego de tag h1
+    if  soup.body.h1.find_all_next("p", limit=4):  # Se extraen los 2 primeros párrafos luego de tag h1
             parrafos = soup.body.h1.find_all_next("p", limit=4)
         
             keyword_sin_acentos = quitar_acentos(keyword)
@@ -184,12 +184,12 @@ def keyword_primer_parrafo(soup,keyword):
                         
                   
        
-        else:
+    else:
             return " ", " ", False
     
 
     #añadir validación para el caso particular de que no haya tag h1
-    except:
-        return  "NULL","H1 TAG NOT FOUND", False
+   # except:
+   #     return  "NULL","H1 TAG NOT FOUND", False
         
 

@@ -126,7 +126,7 @@ if uploaded_file:
             keyword = re.sub(r'[^A-Za-zÀ-ÖØ-öø-ÿ-Z0-9. ]', '', keyword) # no eliminar puntos
             if keyword[-1] == "-" or keyword[-1] == ".":
                 keyword = keyword.rstrip(keyword[-1])
-            if keyword[0] == "-" or keyword[-1] == ".":
+            if keyword[0] == "-" or keyword[0] == ".":
                  keyword = keyword.rstrip(keyword[0])   
                 
             keyword = keyword.strip().lower()
