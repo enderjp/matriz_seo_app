@@ -39,7 +39,7 @@ def keyword_primer_parrafo(soup,keyword):
          
     
     if  soup.body.h1.find_all_next("p", limit=4):  # Se extraen los 2 primeros párrafos luego de tag h1
-            parrafos = soup.body.h1.find_all_next("p", limit=4)
+            parrafos = soup.body.h1.find_all_next("p", limit=15)
         
             keyword_sin_acentos = quitar_acentos(keyword)
             #segundo_parrafo = soup.find("p").get_text().lower()
