@@ -12,21 +12,8 @@ Extraer títulos y metadescripción
 # import urllib.request
 # from urllib.parse import urlparse
 # from bs4 import BeautifulSoup
-from quitar_tildes import quitar_tildes
-
+from quitar_acentos import quitar_acentos
 import unicodedata
-
-
-# funcion para quitar acentos de una frase/párrafo
-
-
-def quitar_acentos(string):
-    
-
-    trans_tab = dict.fromkeys(map(ord, u'\u0301\u0308'), None)
-    resultado = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', string).translate(trans_tab))
-
-    return resultado
 
 def title_seo_h1_diferentes(soup,keyword):
     
@@ -38,10 +25,10 @@ def title_seo_h1_diferentes(soup,keyword):
             
         else: 
             title_h1 = soup.find("h1").get_text().strip().lower()
-            title_h1 = quitar_tildes(title_h1)
+            title_h1 = quitar_acentos(title_h1)
      
         title_seo  = soup.find("title").get_text().strip().lower()
-        title_seo = quitar_tildes(title_seo)
+        title_seo = quitar_acentos(title_seo)
          
          
          
@@ -55,7 +42,7 @@ def title_seo_h1_diferentes(soup,keyword):
     else:
         return "NULL"
 
-def get_title_seo(soup,keyword):
+def obtener_title_seo(soup,keyword):
     """Return the page title
 
     Args:
@@ -92,17 +79,20 @@ def buscar_titulo_h1(soup, keyword):
     titulos = soup.findAll("h1")
     title = ""
     for titulo in titulos:
-        titulo = titulo.get_text().strip().lower()
-        titulo= quitar_acentos(titulo)
+        title = titulo.get_text().strip().lower()
+        title = quitar_acentos(titulo)
        
-        if keyword in titulo:
+        if keyword in title:
             
-            return titulo
+            return title
+        
+    
+           
        # print(title_h1)
    
     return title
 
-def get_title_h1(soup,keyword):
+def obtener_title_h1(soup,keyword):
     """Return the page title
 
     Args:
@@ -148,7 +138,7 @@ def get_title_h1(soup,keyword):
         return "NOT FOUND","Nulo", "Nulo"
    
     
-def get_description(soup, keyword):
+def obtener_description(soup, keyword):
     
     """
     Función para obtener la meta descripción de la url

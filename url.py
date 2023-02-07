@@ -6,31 +6,17 @@ Created on Thu Oct 27 17:50:41 2022
 """
 #from dateutil.parser import parse
 import dateutil.parser as dparser
-import unicodedata
 import re
-#from quitar_tildes import quitar_tildes
+from quitar_acentos import quitar_acentos
 
-
-def url_tam(url, keyword):
+def longitud(url, keyword):
     
-    # Chequeamos si la url tiene menos de 100 caracteres
     if len(url) < 100:
         url_tam = "SI"
     else:
         url_tam = "NO"
         
     return url_tam
-
-
-
-# funcion para quitar acentos de una frase/párrafo
-def quitar_acentos(string):
-    
-
-    trans_tab = dict.fromkeys(map(ord, u'\u0301\u0308'), None)
-    resultado = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', string).translate(trans_tab))
-
-    return resultado
 
 
 def contiene_fecha(url):
@@ -71,16 +57,12 @@ def contiene_fecha(url):
     else:
         return "NO" # no se consiguieron números que puedan ser interpretados como una fecha
     
-
-#x = contiene_fecha(a)
-
 def tiene_kw(url,keyword):
-    
-    
+      
     keyword = keyword.replace(" ", "-") # Si tiene más de una palabra, llevamos el 
                                         # keyword al formato que tiene en las urls
     keyword = keyword.replace("ñ", "n")  
-    keyword = quitar_acentos(keyword) # Quitar acentos
+    keyword = quitar_acentos(keyword) 
     
     if keyword.lower() in url.lower():
         return "SI"

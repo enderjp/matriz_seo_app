@@ -23,6 +23,9 @@ def quitar_acentos(string):
 def keyword_sub(soup,keyword):
     """
     ""
+    
+    ESTA FUNCION YA NO SE ESTA USANDO, POR AHORA SU FUNCIONALIDAD ESTÁ INTEGRADA EN
+    keyword_primer_parrafo.py
 
     Cuenta el número de veces que aparece el keyword en los párrafos de la página,
     y el número de veces que aparece junto con la etiqueta "strong",
@@ -132,26 +135,4 @@ def keyword_sub(soup,keyword):
     else:
         return " "
     
-
-# keyword = "casa"
-# c = soup.find_all(text= keyword)
-# u = soup.find_all(string=keyword)
-# t = soup.find_all(["strong"],string=keyword)
-
-
-# # # keyword = "impacto visual"
-# num_kw = soup.find_all(string=[keyword,keyword.lower(),keyword.capitalize()])
-# kw_strong = soup.find_all("strong", string=[keyword,keyword.lower(),keyword.capitalize()])
-
-# soup.find_all("p",string=re.compile('.*{0}.*'.format(keyword)), recursive=True)
-
-
-# keyword = "comunicación visual"
-
-# soup.find_all(string=[keyword,keyword.lower(),
-#                                keyword.capitalize(),
-#                                keyword + " ",
-#                                " " + keyword])
-
-
 

@@ -6,22 +6,17 @@ Created on Tue Dec 13 11:19:27 2022
 """
 
 import streamlit as st
-
-
 import warnings
 warnings.filterwarnings("ignore")
-
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
-import titulos_metadescripcion as inf_seo
-import keyword_neg 
-import keyword_primer_parrafo as kw_primer_p
-import url_tam_fecha as url
-import obtener_fecha_publicacion as fecha_public
+from titulos_metadescripcion import *
+#import keyword_neg 
+from keyword_primer_parrafo import keyword_primer_parrafo
+import url as url
+from obtener_fecha_publicacion import obtener_fecha
 from titulos_metadescripcion import title_seo_h1_diferentes
-from quitar_tildes import quitar_tildes
-
 import re
 #from titulos_metadescripcion import *
 try:
@@ -127,11 +122,15 @@ if uploaded_file:
             keyword = file.loc[i][1]
             
             # validación para ignorar todo caracter que no sea una letra o un número en la keyword
-            keyword = re.sub(r'[^A-Za-zÀ-ÖØ-öø-ÿ-Z0-9 ]', '', keyword)
-            if keyword[-1] == "-":
+            #keyword = re.sub(r'[^A-Za-zÀ-ÖØ-öø-ÿ-Z0-9 ]', '', keyword)
+            keyword = re.sub(r'[^A-Za-zÀ-ÖØ-öø-ÿ-Z0-9. ]', '', keyword) # no eliminar puntos
+            if keyword[-1] == "-" or keyword[-1] == ".":
                 keyword = keyword.rstrip(keyword[-1])
+            if keyword[0] == "-" or keyword[-1] == ".":
+                 keyword = keyword.rstrip(keyword[0])   
+                
             keyword = keyword.strip().lower()
-            keyword = quitar_tildes(keyword)
+            keyword = quitar_acentos(keyword)
             keyword=  " ".join( keyword.split() ) # eliminar espacios dentro de la keyword
             # por ejemplo "la  comunicación" (hay 1 espacio adicional)
             
@@ -176,13 +175,13 @@ if uploaded_file:
             soup = BeautifulSoup(page.content, 'html.parser')
            
             
-            len_title_seo, have_kw_title_seo = inf_seo.get_title_seo(soup, keyword)
-            len_description, have_kw_meta = inf_seo.get_description(soup, keyword)
-            title_h1,len_title_h1, starts_with_kw= inf_seo.get_title_h1(soup, keyword)
+            len_title_seo, have_kw_title_seo = obtener_title_seo(soup, keyword)
+            len_description, have_kw_meta_description = obtener_description(soup, keyword)
+            title_h1, len_title_h1, starts_with_kw= obtener_title_h1(soup, keyword)
             
             #se añade a la lista un SI o NO, dependiendo si el titulo H1 Y seo son iguales
             titles_h1_seo_same.append(title_seo_h1_diferentes(soup,keyword))
-            kw_subr, kw_primer_parrafo, caso_especial = kw_primer_p.kw_prim_p(soup, keyword)
+            kw_subrayada, kw_primer_parrafo, caso_especial = keyword_primer_parrafo(soup, keyword)
             
             # se añade False o True si se da el caso especial de kw subrayada
             sub_caso_special.append(caso_especial)
@@ -192,23 +191,23 @@ if uploaded_file:
                                  ' ',
                                 ' ',
                                 'SI',
-                                fecha_public.get_date(file.loc[i][0], soup),
+                                obtener_fecha(file.loc[i][0], soup),
                                 keyword,
                                 file.loc[i][0],
                                 len_title_seo,
                                 have_kw_title_seo,
                                 len_description,
-                                have_kw_meta,
+                                have_kw_meta_description,
                                 starts_with_kw,
                                 len_title_h1,
                                 'NO',
-                               kw_subr,
+                               kw_subrayada,
                                kw_primer_parrafo,
                                 'SI',
                                 ' ',
                                 ' ',
                                 ' ',
-                                url.url_tam(file.loc[i][0], keyword),
+                                url.longitud(file.loc[i][0], keyword),
                                 url.contiene_fecha(file.loc[i][0]),
                                 url.tiene_kw(file.loc[i][0], keyword)
                              ]

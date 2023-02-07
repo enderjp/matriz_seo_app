@@ -5,22 +5,22 @@ Created on Thu Oct 27 17:41:08 2022
 @author: darwi
 """
 import streamlit as st
-
-from quitar_tildes import quitar_tildes
+from quitar_acentos import quitar_acentos
 import dateutil.parser as dparser
 import unicodedata
 import re 
 from keyword_resaltada import texto_no_resaltado
 # funcion para quitar acentos de una frase/párrafo
-def quitar_acentos(string):
+
+# def quitar_acentos(string):
     
 
-    trans_tab = dict.fromkeys(map(ord, u'\u0301\u0308'), None)
-    resultado = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', string).translate(trans_tab))
+#     trans_tab = dict.fromkeys(map(ord, u'\u0301\u0308'), None)
+#     resultado = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', string).translate(trans_tab))
 
-    return resultado
+#     return resultado
 
-def kw_prim_p(soup,keyword):
+def keyword_primer_parrafo(soup,keyword):
     """
     ""
     
@@ -30,32 +30,29 @@ def kw_prim_p(soup,keyword):
     texto que no es párrafo. Para esto se toman en cuenta textos que no sean
     excesivamente cortos
     
-    return (el keyword está subrayado en el 1er párrafo?) , (el keyword aparece en el 1er párrafo)
+    return (el keyword está subrayado en el 1er párrafo?) , (el keyword aparece en el 1er párrafo),
+             (Se da el caso especial donde hay más texto subrayado junto al kw?)
 
     """
     
     try:
-         #prueba
+         
     
         if  soup.body.h1.find_all_next("p", limit=4):  # Se extraen los 2 primeros párrafos luego de tag h1
             parrafos = soup.body.h1.find_all_next("p", limit=4)
-            
-            
-            # se toma la keyword sin acentos, por si en el artículo no lo tiene 
-            keyword_2 = quitar_acentos(keyword)
+        
+            keyword_sin_acentos = quitar_acentos(keyword)
             #segundo_parrafo = soup.find("p").get_text().lower()
-            
             
             # se recorren los parrafos  en búsqueda de aquellos demasiado cortos
             # que probablemente no tengan contenido como tal
-            cont=0 # con esta vaariable establecemos dónde considerar el primer párrafo válido
+            cont=0 # con esta variable establecemos dónde considerar el primer párrafo válido
             
            # parrafo_sin_acentos = []
             # for parrafo in parrafos:
             #     x = parrafo.get_text().lower()
             #     x = quitar_acentos(x)
             #     parrafo_sin_acentos.append(x)
-            
             
             for  parrafo in parrafos:
                string = " ".join(parrafo.get_text().split() ) #quitamos espacios adicionales
@@ -70,31 +67,26 @@ def kw_prim_p(soup,keyword):
             
            # eliminar espacios adicionales entre las palabras
             parrafo_sin_acentos = " ".join( parrafo_sin_acentos.split() ) 
-            
            
            # hacer lo mismo a la string con codigo html para hacer operaciones
             primer_parrafo = " ".join( quitar_acentos(str(parrafos[cont])).lower().split() )
             
-            # # Si hay una fecha y el parrafo es muy corto, revisa si está 
-            
-            try:
+                           
+            try:         # # Si hay una fecha y el parrafo es muy corto, revisa si está 
                     if  dparser.parse(parrafo_sin_acentos, fuzzy=True) and len(parrafo_sin_acentos < 60): # si hay una fecha
-                        if ( keyword_2 in parrafo_sin_acentos ): 
-                               
-                         
-                                
-                                
+                        if (keyword_sin_acentos in parrafo_sin_acentos ): 
+                              
                           # expresión regular para determinar si en el primer párrafo está la keyword subrayada
-                                                # se  consideran las etiquetas strong, b, span, u y em-strong
-                            match = re.search(r"(<(strong|b|span|em|u).*>.?" + keyword_2 + "[.,]?.?</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                          # se  consideran las etiquetas strong, b, span, u, i, y em-strong
+                            match = re.search(r"(<(strong|b|span|em|u).*>.?" + keyword_sin_acentos + "[.,]?.?</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
 
                             if (match):
                               return "SI", "SI", False
                           
-                            if (not match):
+                            elif (not match):
                                
-                                
-                                match2 = re.search(r"(<(strong|b|span|em|u).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                # RE ahora considerando texto adicional junto a la kw
+                                match2 = re.search(r"(<(strong|b|span|em|u).*>.*" + keyword_sin_acentos + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                 
                                 if (match2):
                                        # si hay mas 1 hijo  en la etiqueta p
@@ -105,12 +97,12 @@ def kw_prim_p(soup,keyword):
                                        else:
                                            return "NO", "SI", False
                                     
-                                if (not match2):
+                                elif (not match2):
                                     
-                                    # si la kw tiene mas de 1 palabra
-                                      if (len(keyword_2.split()) > 1):
+                                      # si la kw tiene mas de 1 palabra
+                                      if (len(keyword_sin_acentos.split()) > 1):
                                           contador_keyword = 0
-                                          palabras_keyword = keyword_2.split()
+                                          palabras_keyword = keyword_sin_acentos.split()
                                          
                                           for palabra in palabras_keyword:
                                               match = re.search(r"(<(strong|b|span|em|u).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
@@ -139,15 +131,15 @@ def kw_prim_p(soup,keyword):
             # de no ser así y arroja error al verificar fecha, analizar igual si la keyword está alli
             except:
                        
-                        if ( keyword_2 in parrafo_sin_acentos ): 
-                             match = re.search(r"(<(strong|b|span|em|u|i).*>.?" + keyword_2 + "[.,]?.?</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                        if ( keyword_sin_acentos in parrafo_sin_acentos ): 
+                             match = re.search(r"(<(strong|b|span|em|u|i).*>.?" + keyword_sin_acentos + "[.,]?.?</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                              
                              if (match):
                                   return "SI", "SI", False
                               
-                             if (not match):
+                             elif (not match):
                                     
-                                match2 = re.search(r"(<(strong|b|span|em|u|i).*>.*" + keyword_2 + "[.,]?.*</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + keyword_2 + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                match2 = re.search(r"(<(strong|b|span|em|u|i).*>.*" + keyword_sin_acentos + "[.,]?.*</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                 
                                 if (match2):
                                           # si hay mas 1 hijo  en la etiqueta p
@@ -158,11 +150,11 @@ def kw_prim_p(soup,keyword):
                                             else:
                                                 return "NO", "SI", False
                                        
-                                if (not match2):
+                                elif (not match2):
                                     # si la kw tiene mas de 1 palabra
-                                      if (len(keyword_2.split()) > 1):
+                                      if (len(keyword_sin_acentos.split()) > 1):
                                           contador_keyword = 0
-                                          palabras_keyword = keyword_2.split()
+                                          palabras_keyword = keyword_sin_acentos.split()
                                          
                                           for palabra in palabras_keyword:
                                               match = re.search(r"(<(strong|b|span|em|u|i).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
