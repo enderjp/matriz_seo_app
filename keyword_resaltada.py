@@ -37,12 +37,12 @@ def texto_no_resaltado(parrafo):
             tag = child.name
             attrs = child.attrs
         else:
-            if child.name != tag and child.attrs != attrs:
+            if child.name != tag or child.attrs != attrs:
                 all_children_have_same_tag = False
                 return True
-    print("Entro a keyword resaltada")
+    #print("Entro a keyword resaltada")
     return False
-    
+
             
         
         

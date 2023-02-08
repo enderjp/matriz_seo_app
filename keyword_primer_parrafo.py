@@ -79,7 +79,7 @@ def keyword_primer_parrafo(soup,keyword):
                               
                           # expresión regular para determinar si en el primer párrafo está la keyword subrayada
                           # se  consideran las etiquetas strong, b, span, u, i, y em-strong
-                            match = re.search(r"(<(strong|b|span|em|u).*>.?" + keyword_sin_acentos + "[.,]?.?</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                            match = re.search(r"(<(strong|b|span|em|u|i|a).*>.?" + keyword_sin_acentos + "[.,]?.?</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
 
                             if (match):
                               return "SI", "SI", False
@@ -87,7 +87,7 @@ def keyword_primer_parrafo(soup,keyword):
                             elif (not match):
                                
                                 # RE ahora considerando texto adicional junto a la kw
-                                match2 = re.search(r"(<(strong|b|span|em|u).*>.*" + keyword_sin_acentos + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                match2 = re.search(r"(<(strong|b|span|em|u|i|a).*>.*" + keyword_sin_acentos + "[.,]?.*</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                 
                                 if (match2):
                                        # si hay mas 1 hijo  en la etiqueta p
@@ -106,7 +106,7 @@ def keyword_primer_parrafo(soup,keyword):
                                           palabras_keyword = keyword_sin_acentos.split()
                                          
                                           for palabra in palabras_keyword:
-                                              match = re.search(r"(<(strong|b|span|em|u).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                              match = re.search(r"(<(strong|b|span|em|u|i|a).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                               if (match):
                                                   contador_keyword+=1
                                                 
@@ -140,7 +140,7 @@ def keyword_primer_parrafo(soup,keyword):
                               
                              elif (not match):
                                     
-                                match2 = re.search(r"(<(strong|b|span|em|u|i).*>.*" + keyword_sin_acentos + "[.,]?.*</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                match2 = re.search(r"(<(strong|b|span|em|u|i|a).*>.*" + keyword_sin_acentos + "[.,]?.*</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                 
                                 if (match2):
                                           # si hay mas 1 hijo  en la etiqueta p
@@ -158,7 +158,7 @@ def keyword_primer_parrafo(soup,keyword):
                                           palabras_keyword = keyword_sin_acentos.split()
                                          
                                           for palabra in palabras_keyword:
-                                              match = re.search(r"(<(strong|b|span|em|u|i).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                              match = re.search(r"(<(strong|b|span|em|u|i|a).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                                               if (match):
                                                   contador_keyword+=1
                                                
