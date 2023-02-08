@@ -133,7 +133,7 @@ def keyword_primer_parrafo(soup,keyword):
             except:
                        
                         if ( keyword_sin_acentos in parrafo_sin_acentos ): 
-                             match = re.search(r"(<(strong|b|span|em|u|i).*>.?" + keyword_sin_acentos + "[.,]?.?</(strong|b|span|em|u|i)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                             match = re.search(r"(<(strong|b|span|em|u|i|a).*>.?" + keyword_sin_acentos + "[.,]?.?</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
                              
                              if (match):
                                   return "SI", "SI", False
