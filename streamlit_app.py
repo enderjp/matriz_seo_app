@@ -101,7 +101,7 @@ if uploaded_file:
                 
                 with st.sidebar:
                 
-                    string = "Falta la url o la keyword #%s. Aplicación detenida"%(i+1)
+                    string = "Falta la url o la keyword #%s. Aplicación detenida"%(i+2)
                     st.warning(string,icon="⚠️")
                   
                     st.stop # se detiene la app
