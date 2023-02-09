@@ -80,7 +80,7 @@ def buscar_titulo_h1(soup, keyword):
     title = ""
     for titulo in titulos:
         title = titulo.get_text().strip().lower()
-        title = quitar_acentos(titulo)
+        title = quitar_acentos(title)
        
         if keyword in title:
             
