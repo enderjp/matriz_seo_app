@@ -35,6 +35,16 @@ def keyword_primer_parrafo(soup,keyword):
 
     """
     
+    def parrafo_solo_enlaces(parrafo):
+       
+        for child in parrafo:
+             if len(child.text) > 50:
+                 return False
+                 
+         
+        return True
+                 
+ 
     try:
          
     
@@ -54,7 +64,14 @@ def keyword_primer_parrafo(soup,keyword):
             #     x = quitar_acentos(x)
             #     parrafo_sin_acentos.append(x)
             
+            
+            
             for  parrafo in parrafos:
+                
+               if (parrafo_solo_enlaces(parrafo)):
+                   cont+=1
+                   continue
+                
                string = " ".join(parrafo.get_text().split() ) #quitamos espacios adicionales
                if len(string) < 60:
                    cont+=1
