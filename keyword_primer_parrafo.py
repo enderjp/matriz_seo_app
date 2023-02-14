@@ -73,7 +73,7 @@ def keyword_primer_parrafo(soup,keyword):
                    continue
                 
                string = " ".join(parrafo.get_text().split() ) #quitamos espacios adicionales
-               if len(string) < 60:
+               if len(string) < 120 and keyword_sin_acentos not in quitar_acentos(parrafo.get_text().lower()):
                    cont+=1
                    print(parrafo.get_text(), " ", len(parrafo.get_text()))
                else:
@@ -91,7 +91,7 @@ def keyword_primer_parrafo(soup,keyword):
             
                            
             try:         # # Si hay una fecha y el parrafo es muy corto, revisa si está 
-                    if  dparser.parse(parrafo_sin_acentos, fuzzy=True) and len(parrafo_sin_acentos < 60): # si hay una fecha
+                    if  dparser.parse(parrafo_sin_acentos, fuzzy=True) and len(parrafo_sin_acentos < 120): # si hay una fecha
                         if (keyword_sin_acentos in parrafo_sin_acentos ): 
                               
                           # expresión regular para determinar si en el primer párrafo está la keyword subrayada

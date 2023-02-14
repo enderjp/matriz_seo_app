@@ -208,7 +208,7 @@ if uploaded_file:
                                 ' ',
                                 ' ',
                                 ' ',
-                                url.longitud(file.loc[i][0], keyword),
+                                url.longitud(file.loc[i][0]),
                                 url.contiene_fecha(file.loc[i][0]),
                                 url.tiene_kw(file.loc[i][0], keyword)
                              ]
