@@ -36,12 +36,12 @@ def obtener_fecha (url,soup):
     
     else:
         
-        try: 
-                find_date(url)
-                date= find_date(url)
-                return formato_fecha(date)
-        except: #ValueError:
-                return " "
+        # try: 
+        #         find_date(url)
+        #         date= find_date(url)
+        #         return formato_fecha(date)
+        # except: #ValueError:
+                return "FECHA NO ENCONTRADA"
     
 
 

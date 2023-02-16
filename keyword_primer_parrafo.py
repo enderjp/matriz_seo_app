@@ -91,11 +91,13 @@ def keyword_primer_parrafo(soup,keyword):
                               
                          match = match_keyword(keyword_sin_acentos, primer_parrafo)
                          if (match):
+                             # print("Hizo  MATCH REGEXP")
                               return "SI", "SI", False
                           
                          else:
+                             print("entro a else")
                              keyword_resaltada, keyword_completa_no_subrayada = texto_no_resaltado(parrafos[cont].contents,keyword)
-                             
+                             print("keyword resaltada:", keyword_resaltada)
                              if keyword_resaltada:
                                 return "SI", "SI", True
                             
@@ -149,15 +151,17 @@ def keyword_primer_parrafo(soup,keyword):
                               
                              else:
                                  keyword_resaltada, keyword_completa_no_subrayada = texto_no_resaltado(parrafos[cont].contents,keyword)
-                                 
+                                 print("keyword resaltada:", keyword_resaltada)
+
                                  if keyword_resaltada:
+                                     
                                     return "SI", "SI", True
                                 
                                  elif not keyword_resaltada and keyword_completa_no_subrayada:
                                     return "NO", "SI", False
                                 
                                  else:
-                                         
+                                     print("entro a else...why?") 
                                      # si la kw tiene mas de 1 palabra, revisamos casos poco comunes
                                      if  (len(keyword_sin_acentos.split()) > 1):
                                           

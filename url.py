@@ -19,6 +19,17 @@ def longitud(url):
 
 
 
+def reemplazar_caracteres(string, caracter1, caracter2, caracter3=None, caracter4=None):
+    
+    if caracter3 == None and caracter4 == None:
+        resultado  = string.replace(caracter1, caracter2)
+        return resultado
+    else:
+        resultado  = string.replace(caracter1, caracter2).replace(caracter3, caracter4)
+        return resultado
+
+
+
     """
     Return whether the string can be interpreted as a date.
 
@@ -44,9 +55,10 @@ def contiene_fecha(url):
     
 def tiene_kw(url,keyword):
     
-    keyword_url = keyword.replace("ñ", "n")  
-    keyword_url = keyword.replace(".", "")
-    keyword_url = quitar_acentos(keyword) 
+    # keyword_url = keyword.replace("ñ", "n")  
+    # keyword_url = keyword.replace(".", "")
+    keyword_url = reemplazar_caracteres(keyword,"ñ", "n", ".", "")
+    #keyword_url = quitar_acentos(keyword) 
     
     if (len(keyword_url.split()) == 1):
        
@@ -56,9 +68,12 @@ def tiene_kw(url,keyword):
         else:
             return "NO"
     else:
-        keyword_caso1 = keyword.replace(" ", "-") # Si tiene más de una palabra, llevamos el keyword al formato que tiene en las urls
-        keyword_caso2 = keyword.replace(" ", "_") 
-        keyword_caso3 = keyword.replace(" ", "") 
+        # keyword_caso1 = keyword.replace(" ", "-").replace("ñ", "n") # Si tiene más de una palabra, llevamos el keyword al formato que tiene en las urls
+        # keyword_caso2 = keyword.replace(" ", "_").replace("ñ", "n")
+        # keyword_caso3 = keyword.replace(" ", "").replace("ñ", "n")
+        keyword_caso1 = reemplazar_caracteres(keyword, " ", "-", "ñ", "n")
+        keyword_caso2 = reemplazar_caracteres(keyword, " ", "_", "ñ", "n")
+        keyword_caso3 = reemplazar_caracteres(keyword, " ", "", "ñ", "n")
         
         if keyword_caso1 in url.lower() or keyword_caso2 in url.lower() or keyword_caso3 in url.lower():
             return "SI"
@@ -66,6 +81,7 @@ def tiene_kw(url,keyword):
         else: # si entra en un caso particular, estudiar si esta contenida la kw, ejm: innovacion_tecnologica-/xx
             palabras = keyword.split()
             for palabra in palabras:
+                palabra = palabra.replace("ñ", "n")
                 if "." in palabra:
                     opc1 = palabra.replace(".", "-")
                     opc2 = palabra.replace(".", "_")
