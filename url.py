@@ -85,7 +85,8 @@ def tiene_kw(url,keyword):
                 if "." in palabra:
                     opc1 = palabra.replace(".", "-")
                     opc2 = palabra.replace(".", "_")
-                    if opc1 not in url.lower() and opc2 not in url.lower():
+                    opc3 = palabra.replace(".", "")
+                    if opc1 not in url.lower() and opc2 not in url.lower() and opc3 not in url.lower():
                         return "NO"
                 elif palabra not in url.lower():
                     return "NO"
