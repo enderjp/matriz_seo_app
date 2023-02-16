@@ -10,15 +10,10 @@ import dateutil.parser as dparser
 import unicodedata
 import re 
 from keyword_resaltada import texto_no_resaltado
-# funcion para quitar acentos de una frase/párrafo
+from palabra_en_kw_resaltada import palabra_no_resaltada
+from expresion_regular import match_keyword
+from keyword_subrayada_separada import keyword_subrayada_separada
 
-# def quitar_acentos(string):
-    
-
-#     trans_tab = dict.fromkeys(map(ord, u'\u0301\u0308'), None)
-#     resultado = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', string).translate(trans_tab))
-
-#     return resultado
 
 def keyword_primer_parrafo(soup,keyword):
     """
@@ -94,107 +89,82 @@ def keyword_primer_parrafo(soup,keyword):
                     if  dparser.parse(parrafo_sin_acentos, fuzzy=True) and len(parrafo_sin_acentos < 120): # si hay una fecha
                         if (keyword_sin_acentos in parrafo_sin_acentos ): 
                               
-                          # expresión regular para determinar si en el primer párrafo está la keyword subrayada
-                          # se  consideran las etiquetas strong, b, span, u, i, y em-strong
-                            match = re.search(r"(<(strong|b|span|em|u|i|a).*>.?" + keyword_sin_acentos + "[.,]?.?</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
-
-                            if (match):
+                         match = match_keyword(keyword_sin_acentos, primer_parrafo)
+                         if (match):
                               return "SI", "SI", False
                           
-                            elif (not match):
-                               
-                                # RE ahora considerando texto adicional junto a la kw
-                                match2 = re.search(r"(<(strong|b|span|em|u|i|a).*>.*" + keyword_sin_acentos + "[.,]?.*</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
-                                
-                                if (match2):
-                                       # si hay mas 1 hijo  en la etiqueta p
-                                       keyword_resaltada = texto_no_resaltado(parrafos[cont].contents)
-                                       if keyword_resaltada:
-                                           
-                                           return "SI", "SI", True
-                                       else:
-                                           return "NO", "SI", False
+                         else:
+                             keyword_resaltada, keyword_completa_no_subrayada = texto_no_resaltado(parrafos[cont].contents,keyword)
+                             
+                             if keyword_resaltada:
+                                return "SI", "SI", True
+                            
+                             elif not keyword_resaltada and keyword_completa_no_subrayada:
+                                return "NO", "SI", False
+                            
+                             else:
+                                     
+                                 # si la kw tiene mas de 1 palabra, revisamos casos poco comunes
+                                 if  (len(keyword_sin_acentos.split()) > 1):
+                                      
+                                     x, y, z, = keyword_subrayada_separada(keyword_sin_acentos,primer_parrafo, parrafos[cont].contents)
+                                     return x, y, z
+                                 else:
+                                      return "NO", "SI", False
                                     
-                                elif (not match2):
-                                    
-                                      # si la kw tiene mas de 1 palabra
-                                      if (len(keyword_sin_acentos.split()) > 1):
-                                          contador_keyword = 0
-                                          palabras_keyword = keyword_sin_acentos.split()
-                                         
-                                          for palabra in palabras_keyword:
-                                              match = re.search(r"(<(strong|b|span|em|u|i|a).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
-                                              if (match):
-                                                  contador_keyword+=1
-                                                
+                             #elif (not match2):
+                                 # si la kw tiene mas de 1 palabra
+                                  # if (len(keyword_sin_acentos.split()) > 1):
+                                 #         return "No concluyente", "SI", False   
+                                       # contador_keyword = 0
+                                       # palabras_keyword = keyword_sin_acentos.split()
+                                      
+                                       # for palabra in palabras_keyword:
+                                       #     match = re.search(r"(<(strong|b|span|em|u|i|a).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
+                                       #     if (match):
+                                       #         contador_keyword+=1
+                                            
 
-                                          if (contador_keyword == len(palabras_keyword)):
-                                              return "SI", "SI", False
-                                          
-                                          else:
-                                              return "NO", "SI", False
-                                    
-                                          
-                                      else:
-                                         return "NO", "SI", False
-                                
-                          
-                            else:
-                               
-                               return "NO", "SI" , False
-                    
+                                       # if (contador_keyword == len(palabras_keyword)):
+                                       #     return "SI", "SI", False
+                                       
+                                       # else:
+                                       #     return "NO", "SI", False
+                                 
+                                 
+                                 #  else:
+                                   #   return "NO", "SI", False   
+                            
                         else: 
-                                return "NO", "NO", False
+                            return "NO", "NO", False
+                         
                     
             # de no ser así y arroja error al verificar fecha, analizar igual si la keyword está alli
             except:
                        
                         if ( keyword_sin_acentos in parrafo_sin_acentos ): 
-                             match = re.search(r"(<(strong|b|span|em|u|i|a).*>.?" + keyword_sin_acentos + "[.,]?.?</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
-                             
+                             match = match_keyword(keyword_sin_acentos, primer_parrafo)
                              if (match):
                                   return "SI", "SI", False
                               
-                             elif (not match):
-                                    
-                                match2 = re.search(r"(<(strong|b|span|em|u|i|a).*>.*" + keyword_sin_acentos + "[.,]?.*</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + keyword_sin_acentos + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
-                                
-                                if (match2):
-                                          # si hay mas 1 hijo  en la etiqueta p
-                                            keyword_resaltada = texto_no_resaltado(parrafos[cont].contents)
-                                            if keyword_resaltada:
-                                                
-                                                return "SI", "SI", True
-                                            else:
-                                                return "NO", "SI", False
-                                       
-                                elif (not match2):
-                                    # si la kw tiene mas de 1 palabra
-                                      if (len(keyword_sin_acentos.split()) > 1):
-                                          contador_keyword = 0
-                                          palabras_keyword = keyword_sin_acentos.split()
-                                         
-                                          for palabra in palabras_keyword:
-                                              match = re.search(r"(<(strong|b|span|em|u|i|a).*>.*" + palabra + "[.,]?.*</(strong|b|span|em|u|i|a)>)|(<em>.*?<strong>.*?" + palabra + "[.,]?.*?</strong>.*?</em>)",primer_parrafo)
-                                              if (match):
-                                                  contador_keyword+=1
-                                               
-
-                                          if (contador_keyword == len(palabras_keyword)):
-                                              return "SI", "SI", False
-                                          
-                                          else:
-                                              return "NO", "SI", False
-                                    
-                                    
-                                      else:
-                                         return "NO", "SI", False   
-                                     
-                                    
                              else:
-                               
-                               return "NO", "SI" , False
-                        
+                                 keyword_resaltada, keyword_completa_no_subrayada = texto_no_resaltado(parrafos[cont].contents,keyword)
+                                 
+                                 if keyword_resaltada:
+                                    return "SI", "SI", True
+                                
+                                 elif not keyword_resaltada and keyword_completa_no_subrayada:
+                                    return "NO", "SI", False
+                                
+                                 else:
+                                         
+                                     # si la kw tiene mas de 1 palabra, revisamos casos poco comunes
+                                     if  (len(keyword_sin_acentos.split()) > 1):
+                                          
+                                         x, y, z, = keyword_subrayada_separada(keyword_sin_acentos,primer_parrafo, parrafos[cont].contents)
+                                         return x, y, z
+                                     else:
+                                          return "NO", "SI", False
                     
                         else: 
                             return "NO", "NO", False

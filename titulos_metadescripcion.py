@@ -56,6 +56,7 @@ def obtener_title_seo(soup,keyword):
     if soup.findAll("title"):
         title_seo = soup.find("title").get_text().strip()
         title_seo = quitar_acentos(title_seo).lower()
+      #  title_seo = title_seo.split(" -")[0].split(" |")[0].split(" :")[0]
         # Chequear longitud
         if len(title_seo) > 70:
             len_title_seo = "No"

@@ -43,15 +43,50 @@ def contiene_fecha(url):
    
     
 def tiene_kw(url,keyword):
-      
-    keyword = keyword.replace(" ", "-") # Si tiene más de una palabra, llevamos el 
-                                        # keyword al formato que tiene en las urls
-    keyword = keyword.replace("ñ", "n")  
-    keyword = keyword.replace(".", "")
-    keyword = quitar_acentos(keyword) 
     
-    if keyword.lower() in url.lower():
-        return "SI"
-    else: 
-        return "NO"
+    keyword_url = keyword.replace("ñ", "n")  
+    keyword_url = keyword.replace(".", "")
+    keyword_url = quitar_acentos(keyword) 
+    
+    if (len(keyword_url.split()) == 1):
+       
+        if keyword_url in url.lower():
+            return "SI"
+    
+        else:
+            return "NO"
+    else:
+        keyword_caso1 = keyword.replace(" ", "-") # Si tiene más de una palabra, llevamos el keyword al formato que tiene en las urls
+        keyword_caso2 = keyword.replace(" ", "_") 
+        keyword_caso3 = keyword.replace(" ", "") 
+        
+        if keyword_caso1 in url.lower() or keyword_caso2 in url.lower() or keyword_caso3 in url.lower():
+            return "SI"
+        
+        else: # si entra en un caso particular, estudiar si esta contenida la kw, ejm: innovacion_tecnologica-/xx
+            palabras = keyword.split()
+            for palabra in palabras:
+                if "." in palabra:
+                    opc1 = palabra.replace(".", "-")
+                    opc2 = palabra.replace(".", "_")
+                    if opc1 not in url.lower() and opc2 not in url.lower():
+                        return "NO"
+                elif palabra not in url.lower():
+                    return "NO"
+                
+            return "SI"
+        
+    
+    
+        
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
     

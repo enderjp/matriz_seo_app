@@ -246,7 +246,10 @@ if uploaded_file:
         cell_format.set_border()
         worksheet.set_column('A:Z', None, cell_format)
         
+      #  f1=workbook.add_format({'bold':True, 'font_color':'blue'})
+        blue = workbook.add_format({'font_color':'blue'})
         
+
         # background = workbook.add_format({'bg_color': '#44546A'})
 
         # # Add the rule to column A.
@@ -269,6 +272,14 @@ if uploaded_file:
         
             if (title_seo[i] == 'NO'):
                 worksheet.write_comment('I%s'%(i+2), 'Título diferente al propuesto')
+                
+            # cambiar formato para mensaje especial
+            if matriz_seo.loc[i][14] == "NO CONCLUYENTE":
+             #  worksheet.set_font('i+2', 'O', font={'color': 'red', 'bold': True})
+           #   worksheet.write('O%s'%(i+2), bold)
+             #  worksheet.set_format(int(i+2), 14, bold)
+               worksheet.write(int(i+1), 14, 'NO CONCLUYENTE', blue)
+
 
         #----------------------------------------------
         writer.close()
