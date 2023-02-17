@@ -34,14 +34,14 @@ def texto_no_resaltado(parrafo,keyword):
     for child in parrafo:
       print("child: ", child)
       if isinstance(child, NavigableString): # si es un parrafo de texto 
-        texto  = quitar_acentos(str(child)).lower()
+        texto = quitar_acentos(str(child.get_text())).lower()
         if keyword in texto:
             keyword_completa_no_subrayada = True
         all_children_have_same_tag = False
         continue
     # si entra aqui ya all_children_have_same_tag = False
       if isinstance(child, Tag):
-            texto  = quitar_acentos(str(child)).lower()
+            texto = quitar_acentos(str(child.get_text())).lower()
             print(texto)
             print ("TEXTO:", texto)
             if  keyword in texto and child.name in ['b', 'span', 'i', 'em', 'strong', 'u', 'a']:
