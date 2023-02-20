@@ -4,7 +4,7 @@ Created on Thu Oct 27 17:41:08 2022
 
 @author: darwi
 """
-#import streamlit as st
+import streamlit as st
 from quitar_acentos import quitar_acentos
 import dateutil.parser as dparser
 #import unicodedata
@@ -60,7 +60,8 @@ def keyword_primer_parrafo(soup,keyword):
             #     parrafo_sin_acentos.append(x)
             
             
-            
+            st.write("ENTRO if principal")
+
             for  parrafo in parrafos:
                 
                if (parrafo_solo_enlaces(parrafo)):
@@ -89,7 +90,7 @@ def keyword_primer_parrafo(soup,keyword):
                     if  dparser.parse(parrafo_sin_acentos, fuzzy=True) and len(parrafo_sin_acentos < 120): # si hay una fecha
                         if (keyword_sin_acentos in parrafo_sin_acentos ): 
                               
-                         match = match_keyword(keyword_sin_acentos, primer_parrafo)
+                         match = match_keyword(keyword_sin_acentos, primer_parrafo,parrafos[cont].contents, 0) #0
                          if (match):
                              # print("Hizo  MATCH REGEXP")
                               return "SI", "SI", False
@@ -145,11 +146,15 @@ def keyword_primer_parrafo(soup,keyword):
             except:
                        
                         if ( keyword_sin_acentos in parrafo_sin_acentos ): 
-                             match = match_keyword(keyword_sin_acentos, primer_parrafo)
+                             match = match_keyword(keyword_sin_acentos, primer_parrafo,parrafos[cont].contents,0)
                              if (match):
                                   return "SI", "SI", False
-                              
+                                  st.write("enbtro a match1")
+
+
                              else:
+                                 st.write("ENTRO A ELSE")
+
                                  keyword_resaltada, keyword_completa_no_subrayada = texto_no_resaltado(parrafos[cont].contents,keyword)
                                  print("keyword resaltada:", keyword_resaltada)
 

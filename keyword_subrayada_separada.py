@@ -18,7 +18,7 @@ def keyword_subrayada_separada(keyword, primer_parrafo, parrafo):
         # verificar si están las palabras de la kw subrayada separadamente
         for palabra in palabras:
             print("PALABRA:", )
-            match = match_keyword(palabra, primer_parrafo)
+            match = match_keyword(palabra, primer_parrafo, parrafo, 1)
             if not match:
                 keyword_subrayada_por_palabra = False
          

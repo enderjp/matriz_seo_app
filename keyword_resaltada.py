@@ -42,7 +42,7 @@ def texto_no_resaltado(parrafo,keyword):
     # si entra aqui ya all_children_have_same_tag = False
       if isinstance(child, Tag):
             texto = quitar_acentos(str(child.get_text())).lower()
-            print(texto)
+           # print(texto)
             print ("TEXTO:", texto)
             if  keyword in texto and child.name in ['b', 'span', 'i', 'em', 'strong', 'u', 'a']:
                 print("Entro a if")
