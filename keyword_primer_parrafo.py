@@ -4,13 +4,13 @@ Created on Thu Oct 27 17:41:08 2022
 
 @author: darwi
 """
-import streamlit as st
+#import streamlit as st
 from quitar_acentos import quitar_acentos
 import dateutil.parser as dparser
-import unicodedata
-import re 
+#import unicodedata
+#import re 
 from keyword_resaltada import texto_no_resaltado
-from palabra_en_kw_resaltada import palabra_no_resaltada
+#from palabra_en_kw_resaltada import palabra_kw_resaltada
 from expresion_regular import match_keyword
 from keyword_subrayada_separada import keyword_subrayada_separada
 
