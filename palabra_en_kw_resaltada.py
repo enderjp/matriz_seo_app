@@ -6,8 +6,8 @@ Created on Wed Feb 15 13:10:31 2023
 """
 
 from bs4 import BeautifulSoup, NavigableString, Tag
-
-def palabra_no_resaltada(parrafo,keyword):
+from quitar_acentos import quitar_acentos
+def palabra_kw_resaltada(parrafo,keyword):
     """
     
 
@@ -28,8 +28,8 @@ def palabra_no_resaltada(parrafo,keyword):
     kw_inside_tags = False
     
     for child in parrafo:
-        
-            if  keyword in str(child) and child.name in ['b', 'span', 'i', 'em', 'strong', 'u', 'a']:
+            texto  = quitar_acentos(str(child.get_text())).lower()
+            if  keyword in texto and child.name in ['b', 'span', 'i', 'em', 'strong', 'u', 'a']:
 
                 kw_inside_tags = True
                 
