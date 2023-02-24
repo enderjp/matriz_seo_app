@@ -59,8 +59,7 @@ def keyword_primer_parrafo(soup,keyword):
             #     x = quitar_acentos(x)
             #     parrafo_sin_acentos.append(x)
             
-            
-            st.write("ENTRO if principal")
+         
 
             for  parrafo in parrafos:
                 
@@ -96,7 +95,7 @@ def keyword_primer_parrafo(soup,keyword):
                               return "SI", "SI", False
                           
                          else:
-                             print("entro a else")
+                            
                              keyword_resaltada, keyword_completa_no_subrayada = texto_no_resaltado(parrafos[cont].contents,keyword)
                              print("keyword resaltada:", keyword_resaltada)
                              if keyword_resaltada:
@@ -153,7 +152,7 @@ def keyword_primer_parrafo(soup,keyword):
 
 
                              else:
-                                 st.write("ENTRO A ELSE")
+                                 
 
                                  keyword_resaltada, keyword_completa_no_subrayada = texto_no_resaltado(parrafos[cont].contents,keyword)
                                  print("keyword resaltada:", keyword_resaltada)
