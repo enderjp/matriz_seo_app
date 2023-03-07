@@ -18,6 +18,8 @@ import url as url
 from obtener_fecha_publicacion import obtener_fecha
 from titulos_metadescripcion import title_seo_h1_diferentes
 import re
+import validators
+
 #from titulos_metadescripcion import *
 try:
     import StringIO 
@@ -90,6 +92,9 @@ if uploaded_file:
     
     # lista para mostrar mensaje de titulo seo no vinculante
     title_seo = []
+    
+    kw_faltantes = []
+    url_faltantes = []
        
     with st.container():
         for i in range(len(file)):
@@ -97,14 +102,56 @@ if uploaded_file:
            
             
              # si falta la url o el keyword #i en el archivo
-            if ( pd.isna(file.loc[i][0])  or pd.isna(file.loc[i][1]) ):
+            if ( pd.isna(file.loc[i][0])  or pd.isna(file.loc[i][1]) or  not (validators.url(file.loc[i][0])) ):
                 
-                with st.sidebar:
+                matriz_seo.loc[i] = ["NULO" ,  
+                                     "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO",
+                                    "NULO"
+                                 ]
                 
-                    string = "Falta la url o la keyword #%s. Aplicación detenida"%(i+2)
-                    st.warning(string,icon="⚠️")
+                # se añade un null a la lista de comparación de titulos y caso especial
+                # para mantener la misma longitud
+                titles_h1_seo_same.append(" ")
+                sub_caso_special.append(False)
+                title_seo.append(None)
+                
+                if (pd.isna(file.loc[i][0])  or not (validators.url(file.loc[i][0]))):
+                    
+                    url_faltantes.append(i+2);
+                    
+                if ( pd.isna(file.loc[i][1]) ):
+                    kw_faltantes.append(i+2)
+                    
+                    
+                continue
+                
+                
+               # with st.sidebar:
+                
+                   # string = "Falta la url o la keyword #%s. Aplicación detenida"%(i+2)
+                   # st.warning(string,icon="⚠️")
                   
-                    st.stop # se detiene la app
+                  #  st.stop # se detiene la app
                     
             #  Manejar el error de SSL certificate
             
@@ -286,9 +333,29 @@ if uploaded_file:
         
       
         with st.sidebar:
-   
+            
             st.download_button(label='Descargar archivo', data=output.getvalue(), file_name='MATRIZ SEO.xlsx',mime="application/vnd.ms-excel",     
                                on_click=st.stop)
+            
+            if (len(url_faltantes) != 0):
+                string = "Faltan una url o no es válida: " if len(url_faltantes) == 1 else "faltan algunas urls o no son válidas: "
+                st.warning(string,icon="⚠️")
+                texto = "fila: " if len(url_faltantes) == 1 else "filas: "
+                print(texto)
+                st.write(texto)
+                st.text(str(url_faltantes).replace("[", "").replace("]", ""))
+                    
+            if (len(kw_faltantes) != 0):
+                
+                string = "Faltan algunas keywords: " if len(kw_faltantes) == 1 else "falta una keyword: "
+                st.warning(string,icon="⚠️")
+                texto = "fila: " if len(kw_faltantes) == 1 else "filas: "
+                print(texto)
+                st.write(texto)
+                st.text(str(kw_faltantes).replace("[", "").replace("]", ""))
+            
+   
+           
         
     
   
